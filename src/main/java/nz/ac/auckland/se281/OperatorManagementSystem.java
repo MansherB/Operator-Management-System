@@ -14,7 +14,13 @@ public class OperatorManagementSystem {
   public void createOperator(String operatorName, String location) {
     Location locationFound = Location.fromString(location);
     String locationAsString = locationFound.getFullName();
-    MessageCli.OPERATOR_CREATED.printMessage(operatorName, "Something", locationAsString);
+    String[] words = operatorName.split(" ");
+    String wordsAsString = "";
+
+    for (String word : words) {
+      wordsAsString += word.charAt(0);
+}
+    MessageCli.OPERATOR_CREATED.printMessage(operatorName, wordsAsString, locationAsString);
   }
 
   public void viewActivities(String operatorId) {
