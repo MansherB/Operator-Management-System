@@ -27,8 +27,14 @@ public class OperatorManagementSystem {
     for (String word : words) {
       wordsAsString += word.charAt(0); 
   }   
+    int id = 1;
+    String finalId = "";
+  
+      // Generating ID with leading zeros in 3 digit format
+      finalId = String.format("%03d", id);
+      id = id + 1;
 
-    wordsAsString = wordsAsString + "-" + abbreviationnAsString; 
+    wordsAsString = wordsAsString + "-" + abbreviationnAsString + "-" + finalId; 
     
     MessageCli.OPERATOR_CREATED.printMessage(operatorName, wordsAsString, locationAsString);
   }
