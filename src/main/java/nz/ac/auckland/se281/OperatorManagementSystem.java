@@ -1,14 +1,24 @@
 package nz.ac.auckland.se281;
 
 import nz.ac.auckland.se281.Types.Location;
-
+import java.util.ArrayList;
 public class OperatorManagementSystem {
 
-  // Do not change the parameters of the constructor
-  public OperatorManagementSystem() {}
+  private ArrayList<String> operatorNames;
+  private String wordsAsString = "";
   
+  // Do not change the parameters of the constructor
+  public OperatorManagementSystem() {
+    operatorNames = new ArrayList<>();
+  }
+
   public void searchOperators(String keyword) {
-    MessageCli.OPERATORS_FOUND.printMessage("are", "no", "s", ".");
+    
+    if (keyword.equals("*") && operatorNames.size() == 1) {
+      //Getting number of operators in array list
+      Integer numberOfOperators = operatorNames.size();
+      MessageCli.OPERATORS_FOUND.printMessage("is", numberOfOperators.toString(), "", ":");
+    }    
   }
 
   public void createOperator(String operatorName, String location) {
@@ -21,7 +31,7 @@ public class OperatorManagementSystem {
 
     String abbreviationnAsString = locationFound.getLocationAbbreviation();
 
-    String wordsAsString = "";
+    
 
     // Looping through each word in the array and retreiving the first letter (index 0)
     for (String word : words) {
@@ -35,8 +45,11 @@ public class OperatorManagementSystem {
       id = id + 1;
 
     wordsAsString = wordsAsString + "-" + abbreviationnAsString + "-" + finalId; 
+
+    operatorNames.add(operatorName);
     
     MessageCli.OPERATOR_CREATED.printMessage(operatorName, wordsAsString, locationAsString);
+    
   }
 
   public void viewActivities(String operatorId) {
