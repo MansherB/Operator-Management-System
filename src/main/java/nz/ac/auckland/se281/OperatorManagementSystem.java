@@ -4,53 +4,77 @@ import nz.ac.auckland.se281.Types.Location;
 import java.util.ArrayList;
 public class OperatorManagementSystem {
 
-  private ArrayList<String> operatorNames;
-  private String wordsAsString = "";
+  private ArrayList<Operator> operators;
   
   // Do not change the parameters of the constructor
   public OperatorManagementSystem() {
-    operatorNames = new ArrayList<>();
+    operators = new ArrayList<>();
   }
 
   public void searchOperators(String keyword) {
     
-    if (keyword.equals("*") && operatorNames.size() == 1) {
+    if (keyword.equals("*") && operators.size() == 1) {
       //Getting number of operators in array list
-      Integer numberOfOperators = operatorNames.size();
+      Integer numberOfOperators = operators.size();
       MessageCli.OPERATORS_FOUND.printMessage("is", numberOfOperators.toString(), "", ":");
-    }    
+
+      for (Operator operator : operators) {
+        MessageCli.OPERATOR_ENTRY.printMessage(operator.getName(), operator.getId(), operator.getLocation());
+      }
+    } else {
+      MessageCli.OPERATORS_FOUND.printMessage("are", "no", "s", ".");
+    }
   }
 
   public void createOperator(String operatorName, String location) {
     // Getting location from Types.java 
     Location locationFound = Location.fromString(location);
-    // Assigning full english and maori name
     String locationAsString = locationFound.getFullName();
-    // Using split to split up the Operator words in the array
+    String abbreviationAsString = locationFound.getLocationAbbreviation();
+
+    // Extracting first letter of each word in operatorName
     String[] words = operatorName.split(" ");
-
-    String abbreviationnAsString = locationFound.getLocationAbbreviation();
-
-    
-
-    // Looping through each word in the array and retreiving the first letter (index 0)
+    String wordsAsString = ""; // Reset wordsAsString each time this function is called
     for (String word : words) {
-      wordsAsString += word.charAt(0); 
-  }   
-    int id = 1;
-    String finalId = "";
-  
-      // Generating ID with leading zeros in 3 digit format
-      finalId = String.format("%03d", id);
-      id = id + 1;
+        wordsAsString += word.charAt(0);
+    }
 
-    wordsAsString = wordsAsString + "-" + abbreviationnAsString + "-" + finalId; 
+    // Generating unique ID based on the number of operators
+    int id = operators.size() + 1; 
+    String finalId = String.format("%03d", id); 
 
-    operatorNames.add(operatorName);
-    
-    MessageCli.OPERATOR_CREATED.printMessage(operatorName, wordsAsString, locationAsString);
-    
-  }
+    String operatorId = wordsAsString + "-" + abbreviationAsString + "-" + finalId;
+
+    // Add operator to array list
+    operators.add(new Operator(operatorName, operatorId, locationAsString));
+
+    MessageCli.OPERATOR_CREATED.printMessage(operatorName, operatorId, locationAsString);
+}
+
+  class Operator {
+    private String operatorNames;
+    private String wordsAsString;
+    private String locationAsString;
+
+    public Operator(String name, String id, String location) {
+        this.operatorNames = name;
+        this.wordsAsString = id;
+        this.locationAsString = location;
+    }
+
+    public String getName() {
+        return operatorNames;
+    }
+
+    public String getId() {
+        return wordsAsString;
+    }
+
+    public String getLocation() {
+        return locationAsString;
+    }
+}
+
 
   public void viewActivities(String operatorId) {
     // TODO implement
