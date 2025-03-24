@@ -11,6 +11,11 @@ public class OperatorManagementSystem {
     operators = new ArrayList<>();
   }
 
+
+
+
+
+
   public void searchOperators(String keyword) {
     
     if (keyword.equals("*") && operators.size() == 1) {
@@ -26,9 +31,14 @@ public class OperatorManagementSystem {
     }
   }
 
+
+
+
+
   public void createOperator(String operatorName, String location) {
     // Getting location from Types.java 
     Location locationFound = Location.fromString(location);
+
     String locationAsString = locationFound.getFullName();
     String abbreviationAsString = locationFound.getLocationAbbreviation();
 
@@ -45,11 +55,29 @@ public class OperatorManagementSystem {
 
     String operatorId = wordsAsString + "-" + abbreviationAsString + "-" + finalId;
 
+    // Check if operator already exists in the same location
+    for (OperatorSearch operator : operators) {
+      if (operator.getName().equals(operatorName) && operator.getLocation().equals(locationAsString)) {
+          MessageCli.OPERATOR_NOT_CREATED_ALREADY_EXISTS_SAME_LOCATION.printMessage(operatorName, locationAsString);
+          return;
+      }
+    }
+
     // Add operator to array list
     operators.add(new OperatorSearch(operatorName, operatorId, locationAsString));
 
     MessageCli.OPERATOR_CREATED.printMessage(operatorName, operatorId, locationAsString);
-}
+  }
+
+
+
+
+
+
+
+
+
+
 
 
 
