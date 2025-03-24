@@ -11,11 +11,6 @@ public class OperatorManagementSystem {
     operators = new ArrayList<>();
   }
 
-
-
-
-
-
   public void searchOperators(String keyword) {
     
     if (keyword.equals("*") && operators.size() == 1) {
@@ -24,21 +19,31 @@ public class OperatorManagementSystem {
       MessageCli.OPERATORS_FOUND.printMessage("is", numberOfOperators.toString(), "", ":");
 
       for (OperatorSearch operator : operators) {
+        MessageCli.OPERATOR_ENTRY.printMessage(operator.getName(), operator.getId(), operator.getLocation());   
+      }      
+    } 
+
+    // If keyword is * AND operator size is greater than 1
+    else if (keyword.equals("*") && operators.size() > 1) {
+      // Printing correlating message depending on size
+      Integer numberOfOperators = operators.size();
+      MessageCli.OPERATORS_FOUND.printMessage("are", numberOfOperators.toString(), "s", ":");
+
+      for (OperatorSearch operator : operators) {
         MessageCli.OPERATOR_ENTRY.printMessage(operator.getName(), operator.getId(), operator.getLocation());
       }
-    } else {
+
+    }
+    // Else print error message
+    else {
       MessageCli.OPERATORS_FOUND.printMessage("are", "no", "s", ".");
     }
   }
 
 
-
-
-
   public void createOperator(String operatorName, String location) {
-    // Getting location from Types.java 
+    // Getting location/abbreviation from Types.java, and converting to string
     Location locationFound = Location.fromString(location);
-
     String locationAsString = locationFound.getFullName();
     String abbreviationAsString = locationFound.getLocationAbbreviation();
 
@@ -49,13 +54,19 @@ public class OperatorManagementSystem {
         wordsAsString += word.charAt(0);
     }
 
-    // Generating unique ID based on the number of operators
-    int id = operators.size() + 1; 
+    int id = 1; // Default id at 001
+    for (OperatorSearch operator : operators) {
+      if (operator.getLocation().equals(locationAsString)) {
+          // Increment id only if operator with same location exists
+          id++; 
+      }
+    }
+    
+    // &03d ensures two trailing zeros
     String finalId = String.format("%03d", id); 
-
     String operatorId = wordsAsString + "-" + abbreviationAsString + "-" + finalId;
 
-    // Check if operator already exists in the same location
+    // Checking if operator already exists in the same location
     for (OperatorSearch operator : operators) {
       if (operator.getName().equals(operatorName) && operator.getLocation().equals(locationAsString)) {
           MessageCli.OPERATOR_NOT_CREATED_ALREADY_EXISTS_SAME_LOCATION.printMessage(operatorName, locationAsString);
@@ -68,17 +79,6 @@ public class OperatorManagementSystem {
 
     MessageCli.OPERATOR_CREATED.printMessage(operatorName, operatorId, locationAsString);
   }
-
-
-
-
-
-
-
-
-
-
-
 
 
   public void viewActivities(String operatorId) {
