@@ -4,7 +4,7 @@ import nz.ac.auckland.se281.Types.Location;
 import java.util.ArrayList;
 public class OperatorManagementSystem {
 
-  private ArrayList<Operator> operators;
+  private ArrayList<OperatorSearch> operators;
   
   // Do not change the parameters of the constructor
   public OperatorManagementSystem() {
@@ -18,7 +18,7 @@ public class OperatorManagementSystem {
       Integer numberOfOperators = operators.size();
       MessageCli.OPERATORS_FOUND.printMessage("is", numberOfOperators.toString(), "", ":");
 
-      for (Operator operator : operators) {
+      for (OperatorSearch operator : operators) {
         MessageCli.OPERATOR_ENTRY.printMessage(operator.getName(), operator.getId(), operator.getLocation());
       }
     } else {
@@ -46,34 +46,11 @@ public class OperatorManagementSystem {
     String operatorId = wordsAsString + "-" + abbreviationAsString + "-" + finalId;
 
     // Add operator to array list
-    operators.add(new Operator(operatorName, operatorId, locationAsString));
+    operators.add(new OperatorSearch(operatorName, operatorId, locationAsString));
 
     MessageCli.OPERATOR_CREATED.printMessage(operatorName, operatorId, locationAsString);
 }
 
-  class Operator {
-    private String operatorNames;
-    private String wordsAsString;
-    private String locationAsString;
-
-    public Operator(String name, String id, String location) {
-        this.operatorNames = name;
-        this.wordsAsString = id;
-        this.locationAsString = location;
-    }
-
-    public String getName() {
-        return operatorNames;
-    }
-
-    public String getId() {
-        return wordsAsString;
-    }
-
-    public String getLocation() {
-        return locationAsString;
-    }
-}
 
 
   public void viewActivities(String operatorId) {
