@@ -6,6 +6,7 @@ public class OperatorSearch {
   private String locationAsString;
 
   public OperatorSearch(String name, String id, String location) {
+    // Initializing the fields with provided values
     this.operatorNames = name;
     this.wordsAsString = id;
     this.locationAsString = location;
@@ -21,5 +22,16 @@ public class OperatorSearch {
 
   public String getLocation() {
     return locationAsString;
+  }
+
+  // Checks for keyword inside Location enum to return True or False
+  public boolean isValidLocation(String keyword) {
+    for (Types.Location list : Types.Location.values()) {
+      // Making sure case sensitivity is not a factor
+      if (list.toString().equalsIgnoreCase(keyword)) {
+        return true;
+      }
+    }
+    return false;
   }
 }
