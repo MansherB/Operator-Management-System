@@ -1,12 +1,17 @@
 package nz.ac.auckland.se281;
 
+import nz.ac.auckland.se281.Types.Location;
+
 public class OperatorSearch {
   private String operatorNames;
   private String wordsAsString;
   private String locationAsString;
+  private String nameEnglish;
+  private String nameTeReo;
+  private String locationAbbreviation;
 
   public OperatorSearch(String name, String id, String location) {
-    // Initializing the fields with provided values
+    // Initializing Location enum fields
     this.operatorNames = name;
     this.wordsAsString = id;
     this.locationAsString = location;
@@ -24,11 +29,26 @@ public class OperatorSearch {
     return locationAsString;
   }
 
-  // Checks for keyword inside Location enum to return True or False
+  public String getNameEnglish() {
+    return this.nameEnglish;
+  }
+
+  public String getNameTeReo() {
+    return this.nameTeReo;
+  }
+
+  public String getLocationAbbreviation() {
+    return this.locationAbbreviation;
+  }
+
+  // Checking for valid keyword
+  // Returns true if located in Enum
   public boolean isValidLocation(String keyword) {
-    for (Types.Location list : Types.Location.values()) {
+    for (Location list : Location.values()) {
       // Making sure case sensitivity is not a factor
-      if (list.toString().equalsIgnoreCase(keyword)) {
+      if (list.getNameEnglish().trim().equalsIgnoreCase(keyword)
+          || list.getNameTeReo().trim().equalsIgnoreCase(keyword)
+          || list.getLocationAbbreviation().trim().equalsIgnoreCase(keyword)) {
         return true;
       }
     }

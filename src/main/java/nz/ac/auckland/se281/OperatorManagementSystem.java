@@ -46,13 +46,39 @@ public class OperatorManagementSystem {
       ArrayList<OperatorSearch> matchingMaori = new ArrayList<>();
 
       for (OperatorSearch operator : operators) {
-        if (operator.getLocation().contains(keyword)) {
+        if (operator.getLocation().trim().contains(keyword.trim())) {
           matchingMaori.add(operator);
         }
       }
 
       Integer numberOfOperators = matchingMaori.size();
       MessageCli.OPERATORS_FOUND.printMessage("are", numberOfOperators.toString(), "s", ":");
+
+      // Print only matching operators
+      for (OperatorSearch operator : matchingMaori) {
+        MessageCli.OPERATOR_ENTRY.printMessage(
+            operator.getName(), operator.getId(), operator.getLocation());
+      }
+
+    } else if (validateEnum(keyword)) {
+
+      ArrayList<OperatorSearch> matchingMaori = new ArrayList<>();
+
+      for (OperatorSearch operator : operators) {
+        String operatorName = operator.getName().toLowerCase();
+        String operatorLocation = operator.getLocation().toLowerCase();
+
+        if (operatorName.contains(keyword.toLowerCase())
+            || operatorLocation.contains(keyword.toLowerCase())) {
+          matchingMaori.add(operator);
+        }
+      }
+      Integer numberOfOperators = matchingMaori.size();
+      if (operators.size() == 1) {
+        MessageCli.OPERATORS_FOUND.printMessage("is", numberOfOperators.toString(), "", ":");
+      } else {
+        MessageCli.OPERATORS_FOUND.printMessage("are", numberOfOperators.toString(), "s", ":");
+      }
 
       // Print only matching operators
       for (OperatorSearch operator : matchingMaori) {

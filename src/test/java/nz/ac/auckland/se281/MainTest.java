@@ -17,7 +17,7 @@ import org.junit.runners.Suite.SuiteClasses;
   MainTest.Task1.class,
   // MainTest.Task2.class,
   // MainTest.Task3.class,
-  // MainTest.YourTests.class, // Uncomment this line to run your own tests
+  MainTest.YourTests.class,
 })
 public class MainTest {
 
@@ -292,6 +292,25 @@ public class MainTest {
 
       public YourTests() {
         super(Main.class);
+      }
+
+      @Test
+      public void T1_17_search_operator_name_contains_keyword() throws Exception {
+        // Create an operator 'Auckland Harbor Bridge' located in 'Christchurch'
+        runCommands(
+            CREATE_OPERATOR,
+            "'Auckland Harbor Bridge'",
+            "'Christchurch'",
+            SEARCH_OPERATORS,
+            "'Auckland'",
+            EXIT);
+
+        // Assert that the operator 'Auckland Harbor Bridge' is found in the results
+        assertContains("There is 1 matching operator found:");
+        assertContains(
+            "* Auckland Harbor Bridge ('AHB-CHC-001' located in 'Christchurch | Ōtautahi')");
+        assertDoesNotContain("Operator not found", true);
+        assertDoesNotContain("There are", true);
       }
     }
   }
