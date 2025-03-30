@@ -302,7 +302,7 @@ public class MainTest {
             "'Auckland Harbor Bridge'",
             "'Christchurch'",
             SEARCH_OPERATORS,
-            "'Auckland'",
+            "'    Auckland    '",
             EXIT);
 
         // Assert that the operator 'Auckland Harbor Bridge' is found in the results

@@ -41,7 +41,7 @@ public class OperatorManagementSystem {
     else if (keyword.equals("*") && operators.size() <= 0) {
       MessageCli.OPERATORS_FOUND.printMessage("are", "no", "s", ".");
 
-    } else if (!validateEnum(keyword)) {
+    } else if (!validateEnum(keyword.trim())) {
 
       ArrayList<OperatorSearch> matchingMaori = new ArrayList<>();
 
@@ -60,16 +60,17 @@ public class OperatorManagementSystem {
             operator.getName(), operator.getId(), operator.getLocation());
       }
 
-    } else if (validateEnum(keyword)) {
+    } else if (validateEnum(keyword.strip())) {
 
       ArrayList<OperatorSearch> matchingMaori = new ArrayList<>();
+      String trimmedKeyword = keyword.strip().toLowerCase();
 
       for (OperatorSearch operator : operators) {
-        String operatorName = operator.getName().toLowerCase();
-        String operatorLocation = operator.getLocation().toLowerCase();
+        String operatorName = operator.getName().strip().toLowerCase();
+        String operatorLocation = operator.getLocation().strip().toLowerCase();
 
-        if (operatorName.contains(keyword.toLowerCase())
-            || operatorLocation.contains(keyword.toLowerCase())) {
+        if (operatorName.contains(trimmedKeyword.toLowerCase())
+            || operatorLocation.contains(trimmedKeyword.toLowerCase())) {
           matchingMaori.add(operator);
         }
       }
