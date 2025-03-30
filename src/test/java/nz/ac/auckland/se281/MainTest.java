@@ -338,6 +338,21 @@ public class MainTest {
         assertDoesNotContain("Operator not found", true);
         assertDoesNotContain("There are", true);
       }
+
+      @Test
+      public void T1_20_search_operators_location_abbrev() throws Exception {
+        runCommands(unpack(CREATE_14_OPERATORS, SEARCH_OPERATORS, "CHC", EXIT));
+
+        assertContains("There are 2 matching operators found:");
+        assertContains(
+            "* Christchurch Camel Treks ('CCT-CHC-001' located in 'Christchurch | Ōtautahi')");
+        assertContains(
+            "* Avon River Whitewater Rafting ('ARWR-CHC-002' located in 'Christchurch |"
+                + " Ōtautahi')");
+        assertDoesNotContain("There is", true);
+        assertDoesNotContain("There are 14", true);
+        assertDoesNotContain("There are no matching operators found.", true);
+      }
     }
   }
 

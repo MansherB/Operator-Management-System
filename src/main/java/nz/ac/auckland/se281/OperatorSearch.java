@@ -17,6 +17,7 @@ public class OperatorSearch {
     this.operatorNames = name;
     this.wordsAsString = id;
     this.locationAsString = location;
+    this.locationAbbreviation = id;
 
     // Creating new arraylist and storing city abbrevations to check with for each loop
     this.abbList = new ArrayList<>();
@@ -64,14 +65,18 @@ public class OperatorSearch {
           || list.getNameTeReo().trim().equalsIgnoreCase(keyword)) {
         return true;
       }
+    }
+    return false;
+  }
 
-      // Checking each string in abbreviations Array for keyword
-      for (String abbreviation : abbList) {
-        if (abbreviation.trim().toLowerCase().contains(keyword)) {
-          return false;
-        }
+  public boolean isValidAbb(String keyword) {
+    // Checking each string in abbreviations Array for keyword
+    for (String abbreviation : abbList) {
+      if (abbreviation.trim().toLowerCase().contains(keyword.toLowerCase())) {
+        return true;
       }
     }
-    return true;
+
+    return false;
   }
 }

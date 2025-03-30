@@ -51,12 +51,13 @@ public class OperatorManagementSystem {
       for (OperatorSearch operator : operators) {
         String operatorName = operator.getName().trim().toLowerCase();
         String operatorLocation = operator.getLocation().trim().toLowerCase();
+        String operatorAbbreviation = operator.getLocationAbbreviation().trim().toLowerCase();
 
         // Adding to arraylist if keyword matches operator name, operator location, or operator
         // abbreviation
         if (operatorName.contains(trimmedKeyword.toLowerCase())
             || operatorLocation.contains(trimmedKeyword.toLowerCase())
-            || !operator.isValidLocation(trimmedKeyword)) {
+            || operatorAbbreviation.contains(trimmedKeyword)) {
           matchingWord.add(operator);
         }
       }
@@ -86,7 +87,8 @@ public class OperatorManagementSystem {
 
         // If keyword matches name, location, add into arraylist
         if (operatorName.contains(trimmedKeyword.toLowerCase())
-            || operatorLocation.contains(trimmedKeyword.toLowerCase())) {
+            || operatorLocation.contains(trimmedKeyword.toLowerCase())
+            || operator.isValidAbb(trimmedKeyword)) {
           matchingWord.add(operator);
         }
       }
