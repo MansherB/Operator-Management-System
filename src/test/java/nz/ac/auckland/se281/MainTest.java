@@ -296,19 +296,45 @@ public class MainTest {
 
       @Test
       public void T1_17_search_operator_name_contains_keyword() throws Exception {
-        // Create an operator 'Auckland Harbor Bridge' located in 'Christchurch'
         runCommands(
             CREATE_OPERATOR,
             "'Auckland Harbor Bridge'",
             "'Christchurch'",
             SEARCH_OPERATORS,
-            "'    Auckland    '",
+            "'Auckland    '",
             EXIT);
 
-        // Assert that the operator 'Auckland Harbor Bridge' is found in the results
         assertContains("There is 1 matching operator found:");
         assertContains(
             "* Auckland Harbor Bridge ('AHB-CHC-001' located in 'Christchurch | Ōtautahi')");
+        assertDoesNotContain("Operator not found", true);
+        assertDoesNotContain("There are", true);
+      }
+
+      @Test
+      public void T1_18_search_operator_name_contains_keyword() throws Exception {
+        runCommands(
+            CREATE_OPERATOR,
+            "'Auckland Harbor Bridge'",
+            "'Auckland'",
+            SEARCH_OPERATORS,
+            "'Tāmaki   '",
+            EXIT);
+
+        assertContains("There is 1 matching operator found:");
+        assertContains(
+            "* Auckland Harbor Bridge ('AHB-AKL-001' located in 'Auckland | Tāmaki"
+                + " Makaurau')");
+        assertDoesNotContain("Operator not found", true);
+        assertDoesNotContain("There are", true);
+      }
+
+      @Test
+      public void T1_19_search_operator_name_contains_keyword() throws Exception {
+        runCommands(CREATE_OPERATOR, "'Lion'", "'Hamilton'", SEARCH_OPERATORS, "'z'", EXIT);
+
+        assertContains("There is 1 matching operator found:");
+        assertContains("* Lion ('L-HLZ-001' located in 'Hamilton | Kirikiriroa')");
         assertDoesNotContain("Operator not found", true);
         assertDoesNotContain("There are", true);
       }

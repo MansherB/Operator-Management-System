@@ -41,40 +41,56 @@ public class OperatorManagementSystem {
     else if (keyword.equals("*") && operators.size() <= 0) {
       MessageCli.OPERATORS_FOUND.printMessage("are", "no", "s", ".");
 
-    } else if (!validateEnum(keyword.trim())) {
+    } else if (!validateEnum(keyword)) {
 
-      ArrayList<OperatorSearch> matchingMaori = new ArrayList<>();
+      // Creating new arraylist for matching words
+      ArrayList<OperatorSearch> matchingWord = new ArrayList<>();
+      String trimmedKeyword = keyword.trim().toLowerCase();
 
+      // For each loop iterating through each operators name and location
       for (OperatorSearch operator : operators) {
-        if (operator.getLocation().trim().contains(keyword.trim())) {
-          matchingMaori.add(operator);
+        String operatorName = operator.getName().trim().toLowerCase();
+        String operatorLocation = operator.getLocation().trim().toLowerCase();
+
+        // Adding to arraylist if keyword matches operator name, operator location, or operator
+        // abbreviation
+        if (operatorName.contains(trimmedKeyword.toLowerCase())
+            || operatorLocation.contains(trimmedKeyword.toLowerCase())
+            || !operator.isValidLocation(trimmedKeyword)) {
+          matchingWord.add(operator);
         }
       }
 
-      Integer numberOfOperators = matchingMaori.size();
-      MessageCli.OPERATORS_FOUND.printMessage("are", numberOfOperators.toString(), "s", ":");
-
+      Integer numberOfOperators = matchingWord.size();
+      // If statement to differentiate whether there is 1 input or more than 1
+      if (operators.size() == 1) {
+        MessageCli.OPERATORS_FOUND.printMessage("is", numberOfOperators.toString(), "", ":");
+      } else {
+        MessageCli.OPERATORS_FOUND.printMessage("are", numberOfOperators.toString(), "s", ":");
+      }
       // Print only matching operators
-      for (OperatorSearch operator : matchingMaori) {
+      for (OperatorSearch operator : matchingWord) {
         MessageCli.OPERATOR_ENTRY.printMessage(
             operator.getName(), operator.getId(), operator.getLocation());
       }
 
-    } else if (validateEnum(keyword.strip())) {
+    } else if (validateEnum(keyword)) {
 
-      ArrayList<OperatorSearch> matchingMaori = new ArrayList<>();
-      String trimmedKeyword = keyword.strip().toLowerCase();
+      ArrayList<OperatorSearch> matchingWord = new ArrayList<>();
+      String trimmedKeyword = keyword.trim().toLowerCase();
 
+      // For each loop iterating through each operators name and location
       for (OperatorSearch operator : operators) {
-        String operatorName = operator.getName().strip().toLowerCase();
-        String operatorLocation = operator.getLocation().strip().toLowerCase();
+        String operatorName = operator.getName().trim().toLowerCase();
+        String operatorLocation = operator.getLocation().trim().toLowerCase();
 
+        // If keyword matches name, location, add into arraylist
         if (operatorName.contains(trimmedKeyword.toLowerCase())
             || operatorLocation.contains(trimmedKeyword.toLowerCase())) {
-          matchingMaori.add(operator);
+          matchingWord.add(operator);
         }
       }
-      Integer numberOfOperators = matchingMaori.size();
+      Integer numberOfOperators = matchingWord.size();
       if (operators.size() == 1) {
         MessageCli.OPERATORS_FOUND.printMessage("is", numberOfOperators.toString(), "", ":");
       } else {
@@ -82,14 +98,14 @@ public class OperatorManagementSystem {
       }
 
       // Print only matching operators
-      for (OperatorSearch operator : matchingMaori) {
+      for (OperatorSearch operator : matchingWord) {
         MessageCli.OPERATOR_ENTRY.printMessage(
             operator.getName(), operator.getId(), operator.getLocation());
       }
 
     } else {
       // Creating a new array to store matching Maori keywords
-      ArrayList<OperatorSearch> matchingMaori = new ArrayList<>();
+      ArrayList<OperatorSearch> matchingWord = new ArrayList<>();
 
       // Getting Maori words from enum in Types.java
       Location maori = Location.fromString(keyword);
@@ -98,16 +114,16 @@ public class OperatorManagementSystem {
       // Iterating through each operator to check if it contains the Maori keyword
       for (OperatorSearch operator : operators) {
         if (operator.getLocation().contains(maoriAsString)) {
-          matchingMaori.add(operator);
+          matchingWord.add(operator);
         }
       }
 
       // After adding matched Maori words, storing into an integer to get size
-      Integer numberOfOperators = matchingMaori.size();
+      Integer numberOfOperators = matchingWord.size();
       MessageCli.OPERATORS_FOUND.printMessage("are", numberOfOperators.toString(), "s", ":");
 
       // Print only matching operators
-      for (OperatorSearch operator : matchingMaori) {
+      for (OperatorSearch operator : matchingWord) {
         MessageCli.OPERATOR_ENTRY.printMessage(
             operator.getName(), operator.getId(), operator.getLocation());
       }
