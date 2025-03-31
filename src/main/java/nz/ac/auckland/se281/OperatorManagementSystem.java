@@ -66,6 +66,8 @@ public class OperatorManagementSystem {
       // If statement to differentiate whether there is 1 input or more than 1
       if (operators.size() == 1) {
         MessageCli.OPERATORS_FOUND.printMessage("is", numberOfOperators.toString(), "", ":");
+      } else if (matchingWord.size() == 0) {
+        MessageCli.OPERATORS_FOUND.printMessage("are", "no", "s", ".");
       } else {
         MessageCli.OPERATORS_FOUND.printMessage("are", numberOfOperators.toString(), "s", ":");
       }
@@ -144,9 +146,15 @@ public class OperatorManagementSystem {
 
   public void createOperator(String operatorName, String location) {
     // Getting location from Types.java
-    // Getting location/abbreviation from Types.java, and converting to string
     Location locationFound = Location.fromString(location);
 
+    // If invalid location, print error message
+    if (locationFound == null) {
+      MessageCli.OPERATOR_NOT_CREATED_INVALID_LOCATION.printMessage(location);
+      return;
+    }
+
+    // Getting location/abbreviation from Types.java, and converting to string
     String locationAsString = locationFound.getFullName();
     String abbreviationAsString = locationFound.getLocationAbbreviation();
 

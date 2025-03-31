@@ -353,6 +353,22 @@ public class MainTest {
         assertDoesNotContain("There are 14", true);
         assertDoesNotContain("There are no matching operators found.", true);
       }
+
+      @Test
+      public void T1_21_search_operators_garbage() throws Exception {
+        runCommands(unpack(CREATE_14_OPERATORS, SEARCH_OPERATORS, "qwertyuiop", EXIT));
+        assertContains("There are no matching operators found.");
+        assertDoesNotContain("found:", true);
+      }
+
+      @Test
+      public void T1_22_create_operator_invalid_location() throws Exception {
+        runCommands(
+            CREATE_OPERATOR, "'Stewart Island Wild Kiwi Encounters'", "'Stewart Island'", EXIT);
+
+        assertContains("Operator not created: 'Stewart Island' is an invalid location.");
+        assertDoesNotContain("Successfully created operator");
+      }
     }
   }
 
