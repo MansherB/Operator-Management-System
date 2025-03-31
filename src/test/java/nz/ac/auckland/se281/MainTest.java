@@ -369,6 +369,31 @@ public class MainTest {
         assertContains("Operator not created: 'Stewart Island' is an invalid location.");
         assertDoesNotContain("Successfully created operator");
       }
+
+      @Test
+      public void T1_23_create_operator_name_too_short() throws Exception {
+        runCommands(CREATE_OPERATOR, "'Hi'", "'Akl'", EXIT);
+        assertContains("Operator not created: 'Hi' is not a valid operator name.");
+        assertDoesNotContain("Successfully created operator");
+      }
+
+      @Test
+      public void T1_23_create_operator_name_valid() throws Exception {
+        runCommands(CREATE_OPERATOR, "'Hii'", "'Akl'", EXIT);
+        assertContains(
+            "Successfully created operator 'Hii' ('H-AKL-001') located in 'Auckland | Tāmaki"
+                + " Makaurau'");
+        assertDoesNotContain("Operator not created");
+      }
+
+      @Test
+      public void T1_14_search_operators_pipe_keyword() throws Exception {
+        runCommands(unpack(CREATE_14_OPERATORS, SEARCH_OPERATORS, "|", EXIT));
+
+        assertContains("There are no matching operators found.");
+        assertDoesNotContain("There is", true);
+        assertDoesNotContain("There are 14", true);
+      }
     }
   }
 

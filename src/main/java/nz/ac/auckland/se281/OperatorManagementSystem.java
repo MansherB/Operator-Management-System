@@ -41,7 +41,7 @@ public class OperatorManagementSystem {
     else if (keyword.equals("*") && operators.size() <= 0) {
       MessageCli.OPERATORS_FOUND.printMessage("are", "no", "s", ".");
 
-    } else if (!validateEnum(keyword)) {
+    } else if (!validateEnum(keyword) && (!keyword.equals("|"))) {
 
       // Creating new arraylist for matching words
       ArrayList<OperatorSearch> matchingWord = new ArrayList<>();
@@ -107,6 +107,9 @@ public class OperatorManagementSystem {
             operator.getName(), operator.getId(), operator.getLocation());
       }
 
+    } else if (keyword.equals("|")) {
+      MessageCli.OPERATORS_FOUND.printMessage("are", "no", "s", ".");
+
     } else {
       // Creating a new array to store matching Maori keywords
       ArrayList<OperatorSearch> matchingWord = new ArrayList<>();
@@ -157,6 +160,11 @@ public class OperatorManagementSystem {
     // Getting location/abbreviation from Types.java, and converting to string
     String locationAsString = locationFound.getFullName();
     String abbreviationAsString = locationFound.getLocationAbbreviation();
+
+    if (operatorName.trim().length() < 3) {
+      MessageCli.OPERATOR_NOT_CREATED_INVALID_OPERATOR_NAME.printMessage(operatorName);
+      return;
+    }
 
     // Extracting first letter of each word in operatorName
     String[] words = operatorName.split(" ");
