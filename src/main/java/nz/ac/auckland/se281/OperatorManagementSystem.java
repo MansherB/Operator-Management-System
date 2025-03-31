@@ -107,9 +107,6 @@ public class OperatorManagementSystem {
             operator.getName(), operator.getId(), operator.getLocation());
       }
 
-    } else if (keyword.equals("|")) {
-      MessageCli.OPERATORS_FOUND.printMessage("are", "no", "s", ".");
-
     } else {
       // Creating a new array to store matching Maori keywords
       ArrayList<OperatorSearch> matchingWord = new ArrayList<>();

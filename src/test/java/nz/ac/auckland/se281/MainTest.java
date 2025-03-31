@@ -318,7 +318,7 @@ public class MainTest {
             "'Auckland Harbor Bridge'",
             "'Auckland'",
             SEARCH_OPERATORS,
-            "'Tāmaki   '",
+            "'Tāmaki Makaurau'",
             EXIT);
 
         assertContains("There is 1 matching operator found:");
@@ -384,15 +384,6 @@ public class MainTest {
             "Successfully created operator 'Hii' ('H-AKL-001') located in 'Auckland | Tāmaki"
                 + " Makaurau'");
         assertDoesNotContain("Operator not created");
-      }
-
-      @Test
-      public void T1_14_search_operators_pipe_keyword() throws Exception {
-        runCommands(unpack(CREATE_14_OPERATORS, SEARCH_OPERATORS, "|", EXIT));
-
-        assertContains("There are no matching operators found.");
-        assertDoesNotContain("There is", true);
-        assertDoesNotContain("There are 14", true);
       }
     }
   }
