@@ -215,6 +215,13 @@ public class OperatorManagementSystem {
       MessageCli.ACTIVITY_NOT_CREATED_INVALID_ACTIVITY_NAME.printMessage(activityName);
       return;
     }
+
+    for (OperatorSearch operator : operators) {
+      if (!(operator.getId().equals(operatorId))) {
+        MessageCli.ACTIVITY_NOT_CREATED_INVALID_OPERATOR_ID.printMessage(operatorId);
+        return;
+      }
+    }
   }
 
   public void searchActivities(String keyword) {
