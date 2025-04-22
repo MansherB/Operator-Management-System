@@ -1,11 +1,13 @@
 package nz.ac.auckland.se281;
 
 import java.util.ArrayList;
+import nz.ac.auckland.se281.Types.ActivityType;
 import nz.ac.auckland.se281.Types.Location;
 
 public class OperatorManagementSystem {
 
   private ArrayList<OperatorSearch> operators;
+  private ArrayList<OperatorActivity> activities = new ArrayList<>();
 
   // Do not change the parameters of the constructor
   public OperatorManagementSystem() {
@@ -201,20 +203,50 @@ public class OperatorManagementSystem {
   }
 
   public void viewActivities(String operatorId) {
+
+    // Initially not found = false
+    boolean operatorFound = false;
+    String operatorName = "";
+
     for (OperatorSearch operator : operators) {
       if (operator.getId().equals(operatorId)) {
+        // If id equals operatorFound is true
+        operatorFound = true;
+        operatorName = operator.getName();
+        break;
+      }
+    }
+
+    // Error message if not found
+    if (!operatorFound) {
+      MessageCli.OPERATOR_NOT_FOUND.printMessage(operatorId);
+      return;
+    }
+
+    // Getting size of activities and printing the number
+    Integer numberOfActivities = activities.size();
+    MessageCli.ACTIVITIES_FOUND.printMessage("are", numberOfActivities.toString(), "ies", ":");
+    for (OperatorActivity activity : activities) {
+
+      if (activity.getOperatorId().equals(operatorId)) {
+
+        MessageCli.ACTIVITY_ENTRY.printMessage(
+            activity.getName(),
+            activity.getActivityId(),
+            ActivityType.ADVENTURE.getName(),
+            operatorName);
+
+      } else {
         MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "ies", ".");
       }
     }
-    MessageCli.OPERATOR_NOT_FOUND.printMessage(operatorId);
   }
 
   public void createActivity(String activityName, String activityType, String operatorId) {
 
     int id = 1; // Default id at 001
-    for (OperatorSearch operator : operators) {
-      if (operator.getName().equals(activityName)) {
-        // Increment id only if operator with same location exists
+    for (OperatorActivity activity : activities) {
+      if (activity.getOperatorId().equals(operatorId)) {
         id++;
       }
     }
@@ -229,9 +261,11 @@ public class OperatorManagementSystem {
       return;
     }
 
-    // For each loop for successfull activity created
     for (OperatorSearch operator : operators) {
       if (operator.getId().equals(operatorId)) {
+        activities.add(
+            new OperatorActivity(
+                activityName, createOperatorId, activityType, operator.getName(), operatorId));
         MessageCli.ACTIVITY_CREATED.printMessage(
             activityName, createOperatorId, activityType, operator.getName());
         return;
