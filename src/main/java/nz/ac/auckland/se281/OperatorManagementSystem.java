@@ -204,7 +204,6 @@ public class OperatorManagementSystem {
     for (OperatorSearch operator : operators) {
       if (operator.getId().equals(operatorId)) {
         MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "ies", ".");
-        return;
       }
     }
     MessageCli.OPERATOR_NOT_FOUND.printMessage(operatorId);
@@ -230,6 +229,7 @@ public class OperatorManagementSystem {
       return;
     }
 
+    // For each loop for successfull activity created
     for (OperatorSearch operator : operators) {
       if (operator.getId().equals(operatorId)) {
         MessageCli.ACTIVITY_CREATED.printMessage(
@@ -237,6 +237,26 @@ public class OperatorManagementSystem {
         return;
       }
       MessageCli.ACTIVITY_NOT_CREATED_INVALID_OPERATOR_ID.printMessage(operatorId);
+    }
+  }
+
+  public class OperatorActivity extends Activities {
+    private String operatorId;
+    private String activityId;
+
+    public OperatorActivity(
+        String name, String id, String type, String operatorName, String operatorId) {
+      super(name, id, type, operatorName);
+      this.operatorId = operatorId;
+      this.activityId = id; // Saving the full activity ID (e.g., WACT-AKL-001-001)
+    }
+
+    public String getOperatorId() {
+      return operatorId;
+    }
+
+    public String getActivityId() {
+      return activityId;
     }
   }
 
