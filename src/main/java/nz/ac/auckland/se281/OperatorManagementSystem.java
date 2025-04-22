@@ -211,7 +211,10 @@ public class OperatorManagementSystem {
   }
 
   public void createActivity(String activityName, String activityType, String operatorId) {
-    // TODO implement
+    if (activityName.trim().length() < 3) {
+      MessageCli.ACTIVITY_NOT_CREATED_INVALID_ACTIVITY_NAME.printMessage(activityName);
+      return;
+    }
   }
 
   public void searchActivities(String keyword) {
