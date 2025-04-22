@@ -64,7 +64,7 @@ public class OperatorManagementSystem {
 
       Integer numberOfOperators = matchingWord.size();
       // If statement to differentiate whether there is 1 input or more than 1
-      if (operators.size() == 1) {
+      if (matchingWord.size() == 1) {
         MessageCli.OPERATORS_FOUND.printMessage("is", numberOfOperators.toString(), "", ":");
       } else if (matchingWord.size() == 0) {
         MessageCli.OPERATORS_FOUND.printMessage("are", "no", "s", ".");
@@ -201,7 +201,12 @@ public class OperatorManagementSystem {
   }
 
   public void viewActivities(String operatorId) {
-    // TODO implement
+    for (OperatorSearch operator : operators) {
+      if (operator.getId().equals(operatorId)) {
+        return;
+      }
+    }
+    MessageCli.OPERATOR_NOT_FOUND.printMessage(operatorId);
   }
 
   public void createActivity(String activityName, String activityType, String operatorId) {

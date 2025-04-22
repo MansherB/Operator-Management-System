@@ -15,7 +15,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({
   MainTest.Task1.class,
-  // MainTest.Task2.class,
+  MainTest.Task2.class,
   // MainTest.Task3.class,
   MainTest.YourTests.class,
 })
@@ -384,6 +384,18 @@ public class MainTest {
             "Successfully created operator 'Hii' ('H-AKL-001') located in 'Auckland | Tāmaki"
                 + " Makaurau'");
         assertDoesNotContain("Operator not created");
+      }
+
+      @Test
+      public void T1_xx_search_operators_keyword_in_name() throws Exception {
+        runCommands(unpack(CREATE_14_OPERATORS, SEARCH_OPERATORS, "Avon", EXIT));
+
+        assertContains("There is 1 matching operator found:");
+        assertContains(
+            "* Avon River Whitewater Rafting ('ARWR-CHC-002' located in 'Christchurch |"
+                + " Ōtautahi')");
+        assertDoesNotContain("There are 14", true);
+        assertDoesNotContain("no matching operators found", true);
       }
     }
   }
