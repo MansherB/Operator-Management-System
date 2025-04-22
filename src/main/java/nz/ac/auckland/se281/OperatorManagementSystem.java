@@ -204,30 +204,43 @@ public class OperatorManagementSystem {
 
   public void viewActivities(String operatorId) {
 
-    // Initially not found = false
     boolean operatorFound = false;
     String operatorName = "";
 
     for (OperatorSearch operator : operators) {
       if (operator.getId().equals(operatorId)) {
-        // If id equals operatorFound is true
         operatorFound = true;
         operatorName = operator.getName();
         break;
       }
     }
 
-    // Error message if not found
     if (!operatorFound) {
       MessageCli.OPERATOR_NOT_FOUND.printMessage(operatorId);
       return;
     }
 
-    // Getting size of activities and printing the number
-    Integer numberOfActivities = activities.size();
-    MessageCli.ACTIVITIES_FOUND.printMessage("are", numberOfActivities.toString(), "ies", ":");
+    ArrayList<OperatorActivity> activitiesFound = new ArrayList<>();
     for (OperatorActivity activity : activities) {
+      if (activity.getOperatorId().equals(operatorId)) {
+        activitiesFound.add(activity);
+      }
+    }
 
+    if (activitiesFound.size() == 0) {
+      MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "ies", ".");
+      return;
+    }
+
+    // Singular or plural messages
+    if (activitiesFound.size() == 1) {
+      MessageCli.ACTIVITIES_FOUND.printMessage("is", "1", "y", ":");
+    } else {
+      MessageCli.ACTIVITIES_FOUND.printMessage(
+          "are", String.valueOf(activitiesFound.size()), "ies", ":");
+    }
+
+    for (OperatorActivity activity : activities) {
       if (activity.getOperatorId().equals(operatorId)) {
 
         MessageCli.ACTIVITY_ENTRY.printMessage(
