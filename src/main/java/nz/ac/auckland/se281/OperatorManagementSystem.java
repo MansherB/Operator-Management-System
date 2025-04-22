@@ -211,16 +211,32 @@ public class OperatorManagementSystem {
   }
 
   public void createActivity(String activityName, String activityType, String operatorId) {
+
+    int id = 1; // Default id at 001
+    for (OperatorSearch operator : operators) {
+      if (operator.getName().equals(activityName)) {
+        // Increment id only if operator with same location exists
+        id++;
+      }
+    }
+
+    // &03d ensures two trailing zeros
+    String finalId = String.format("%03d", id);
+
+    String createOperatorId = operatorId + "-" + finalId;
+
     if (activityName.trim().length() < 3) {
       MessageCli.ACTIVITY_NOT_CREATED_INVALID_ACTIVITY_NAME.printMessage(activityName);
       return;
     }
 
     for (OperatorSearch operator : operators) {
-      if (!(operator.getId().equals(operatorId))) {
-        MessageCli.ACTIVITY_NOT_CREATED_INVALID_OPERATOR_ID.printMessage(operatorId);
+      if (operator.getId().equals(operatorId)) {
+        MessageCli.ACTIVITY_CREATED.printMessage(
+            activityName, createOperatorId, activityType, operator.getName());
         return;
       }
+      MessageCli.ACTIVITY_NOT_CREATED_INVALID_OPERATOR_ID.printMessage(operatorId);
     }
   }
 
