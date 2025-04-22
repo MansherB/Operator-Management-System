@@ -283,8 +283,8 @@ public class OperatorManagementSystem {
             activityName, createOperatorId, activityType, operator.getName());
         return;
       }
-      MessageCli.ACTIVITY_NOT_CREATED_INVALID_OPERATOR_ID.printMessage(operatorId);
     }
+    MessageCli.ACTIVITY_NOT_CREATED_INVALID_OPERATOR_ID.printMessage(operatorId);
   }
 
   public class OperatorActivity extends Activities {
@@ -308,7 +308,9 @@ public class OperatorManagementSystem {
   }
 
   public void searchActivities(String keyword) {
-    // TODO implement
+    if (keyword.equals("*") && activities.size() == 0) {
+      MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "ies", ".");
+    }
   }
 
   public void addPublicReview(String activityId, String[] options) {
