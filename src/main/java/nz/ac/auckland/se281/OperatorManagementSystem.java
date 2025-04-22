@@ -310,8 +310,16 @@ public class OperatorManagementSystem {
   public void searchActivities(String keyword) {
     if (keyword.equals("*") && activities.size() == 0) {
       MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "ies", ".");
+    } else if (keyword.equals("*") && activities.size() > 0) {
+      Integer numberOfActivities = activities.size();
+      MessageCli.ACTIVITIES_FOUND.printMessage("are", numberOfActivities.toString(), "ies", ":");
+    } else if (!(activities.contains(keyword))) {
+      MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "ies", ".");
     }
   }
+
+  // Integer numberOfOperators = operators.size();
+  // MessageCli.OPERATORS_FOUND.printMessage("are", numberOfOperators.toString(), "s", ":");
 
   public void addPublicReview(String activityId, String[] options) {
     // TODO implement
