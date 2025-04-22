@@ -203,6 +203,7 @@ public class OperatorManagementSystem {
   public void viewActivities(String operatorId) {
     for (OperatorSearch operator : operators) {
       if (operator.getId().equals(operatorId)) {
+        MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "ies", ".");
         return;
       }
     }
