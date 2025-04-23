@@ -203,7 +203,6 @@ public class OperatorManagementSystem {
   }
 
   public void viewActivities(String operatorId) {
-
     boolean operatorFound = false;
     String operatorName = "";
 
@@ -287,39 +286,15 @@ public class OperatorManagementSystem {
     MessageCli.ACTIVITY_NOT_CREATED_INVALID_OPERATOR_ID.printMessage(operatorId);
   }
 
-  public class OperatorActivity extends Activities {
-    private String operatorId;
-    private String activityId;
-    private String activityType;
-
-    public OperatorActivity(
-        String name, String id, String type, String operatorName, String operatorId) {
-      super(name, id, type, operatorName);
-      this.operatorId = operatorId;
-      this.activityId = id; // Saving the full activity ID (e.g., WACT-AKL-001-001)
-      this.activityType = type;
-    }
-
-    public String getOperatorId() {
-      return operatorId;
-    }
-
-    public String getActivityId() {
-      return activityId;
-    }
-
-    public String getActivityType() {
-      return activityType;
-    }
-  }
-
   // Searching for all activities if keyword = *
   public void searchActivities(String keyword) {
     if (keyword.equals("*") && activities.size() == 0) {
       MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "ies", ".");
+      return;
     } else if (keyword.equals("*") && activities.size() > 0) {
       Integer numberOfActivities = activities.size();
       MessageCli.ACTIVITIES_FOUND.printMessage("are", numberOfActivities.toString(), "ies", ":");
+      return;
     }
 
     // New arraylist for matching words so their size can be checked
@@ -329,6 +304,20 @@ public class OperatorManagementSystem {
       if (activity.getName().toLowerCase().contains(keyword.toLowerCase())
           || (activity.getActivityType().toLowerCase().contains(keyword.toLowerCase()))) {
         matchingWord.add(activity);
+      }
+    }
+
+    Location locationKeyword = Location.fromString(keyword);
+    if (locationKeyword != null) {
+      String fullLocationName = locationKeyword.getFullName();
+      for (OperatorSearch operator : operators) {
+        if (operator.getLocation().equals(fullLocationName)) {
+          for (OperatorActivity activity : activities) {
+            if (activity.getOperatorId().equals(operator.getId())) {
+              matchingWord.add(activity);
+            }
+          }
+        }
       }
     }
 
