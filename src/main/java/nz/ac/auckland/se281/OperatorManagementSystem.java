@@ -290,12 +290,14 @@ public class OperatorManagementSystem {
   public class OperatorActivity extends Activities {
     private String operatorId;
     private String activityId;
+    private String activityType;
 
     public OperatorActivity(
         String name, String id, String type, String operatorName, String operatorId) {
       super(name, id, type, operatorName);
       this.operatorId = operatorId;
       this.activityId = id; // Saving the full activity ID (e.g., WACT-AKL-001-001)
+      this.activityType = type;
     }
 
     public String getOperatorId() {
@@ -304,6 +306,10 @@ public class OperatorManagementSystem {
 
     public String getActivityId() {
       return activityId;
+    }
+
+    public String getActivityType() {
+      return activityType;
     }
   }
 
@@ -328,10 +334,11 @@ public class OperatorManagementSystem {
 
     // Print only matching operators
     for (OperatorActivity matchingActivity : matchingWord) {
+
       MessageCli.ACTIVITY_ENTRY.printMessage(
           matchingActivity.getName(),
           matchingActivity.getActivityId(),
-          ActivityType.SCENIC.getName(),
+          matchingActivity.getActivityType(),
           matchingActivity.getOperatorName());
       return;
     }
