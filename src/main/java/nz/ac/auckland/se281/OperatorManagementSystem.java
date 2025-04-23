@@ -321,28 +321,36 @@ public class OperatorManagementSystem {
       Integer numberOfActivities = activities.size();
       MessageCli.ACTIVITIES_FOUND.printMessage("are", numberOfActivities.toString(), "ies", ":");
     }
+
     // New arraylist for matching words so their size can be checked
     ArrayList<OperatorActivity> matchingWord = new ArrayList<>();
 
     for (OperatorActivity activity : activities) {
-      if (activity.getName().toLowerCase().contains(keyword.toLowerCase())) {
+      if (activity.getName().toLowerCase().contains(keyword.toLowerCase())
+          || (activity.getActivityType().toLowerCase().contains(keyword.toLowerCase()))) {
         matchingWord.add(activity);
-        Integer numberOfActivities = matchingWord.size();
-        MessageCli.ACTIVITIES_FOUND.printMessage("is", numberOfActivities.toString(), "y", ":");
       }
     }
 
-    // Print only matching operators
-    for (OperatorActivity matchingActivity : matchingWord) {
+    Integer numberOfActivities = matchingWord.size();
+    if (numberOfActivities == 0) {
+      MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "ies", ".");
+      return;
+    } else if (numberOfActivities == 1) {
+      MessageCli.ACTIVITIES_FOUND.printMessage("is", "1", "y", ":");
+    } else {
+      MessageCli.ACTIVITIES_FOUND.printMessage(
+          "are", String.valueOf(numberOfActivities), "ies", ":");
+    }
 
+    // Print only matching activities
+    for (OperatorActivity matchingActivity : matchingWord) {
       MessageCli.ACTIVITY_ENTRY.printMessage(
           matchingActivity.getName(),
           matchingActivity.getActivityId(),
           matchingActivity.getActivityType(),
           matchingActivity.getOperatorName());
-      return;
     }
-    MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "ies", ".");
   }
 
   public void addPublicReview(String activityId, String[] options) {
