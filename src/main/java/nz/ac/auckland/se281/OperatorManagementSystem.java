@@ -307,19 +307,36 @@ public class OperatorManagementSystem {
     }
   }
 
+  // Searching for all activities if keyword = *
   public void searchActivities(String keyword) {
     if (keyword.equals("*") && activities.size() == 0) {
       MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "ies", ".");
     } else if (keyword.equals("*") && activities.size() > 0) {
       Integer numberOfActivities = activities.size();
       MessageCli.ACTIVITIES_FOUND.printMessage("are", numberOfActivities.toString(), "ies", ":");
-    } else if (!(activities.contains(keyword))) {
-      MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "ies", ".");
     }
-  }
+    // New arraylist for matching words so their size can be checked
+    ArrayList<OperatorActivity> matchingWord = new ArrayList<>();
 
-  // Integer numberOfOperators = operators.size();
-  // MessageCli.OPERATORS_FOUND.printMessage("are", numberOfOperators.toString(), "s", ":");
+    for (OperatorActivity activity : activities) {
+      if (activity.getName().toLowerCase().contains(keyword.toLowerCase())) {
+        matchingWord.add(activity);
+        Integer numberOfActivities = matchingWord.size();
+        MessageCli.ACTIVITIES_FOUND.printMessage("is", numberOfActivities.toString(), "y", ":");
+      }
+    }
+
+    // Print only matching operators
+    for (OperatorActivity matchingActivity : matchingWord) {
+      MessageCli.ACTIVITY_ENTRY.printMessage(
+          matchingActivity.getName(),
+          matchingActivity.getActivityId(),
+          ActivityType.SCENIC.getName(),
+          matchingActivity.getOperatorName());
+      return;
+    }
+    MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "ies", ".");
+  }
 
   public void addPublicReview(String activityId, String[] options) {
     // TODO implement
