@@ -609,6 +609,54 @@ public class MainTest {
       assertDoesNotContain("There is 1", true);
       assertDoesNotContain("There are 4", true);
     }
+
+    @Test
+    public void T2_16_create_activity_extra_spaces_in_name() throws Exception {
+      runCommands(
+          CREATE_OPERATOR,
+          "'West Auckland Camel Treks'",
+          "'AKL'",
+          CREATE_ACTIVITY,
+          "'     Sunset Camel Trek     '",
+          "Adventure",
+          "'WACT-AKL-001'",
+          EXIT);
+      assertContains("Successfully created activity 'Sunset Camel Trek'");
+      assertDoesNotContain("Successfully created activity '     Sunset Camel Trek     '", true);
+    }
+
+    @Test
+    public void T2_17_create_activity_unknown_activity_type() throws Exception {
+      runCommands(
+          CREATE_OPERATOR,
+          "'West Auckland Camel Treks'",
+          "'AKL'",
+          CREATE_ACTIVITY,
+          "'Sunset Camel Trek'",
+          "ajsdoifjaoisdfjaosidfj",
+          "'WACT-AKL-001'",
+          EXIT);
+      assertContains("Successfully created activity");
+      assertContains("'Other'");
+      assertDoesNotContain("Activity not created", true);
+    }
+
+    // Tests if the activity type is case insensitive
+    @Test
+    public void T2_18_create_activity_random_case_activity_type() throws Exception {
+      runCommands(
+          CREATE_OPERATOR,
+          "'West Auckland Camel Treks'",
+          "'AKL'",
+          CREATE_ACTIVITY,
+          "'Sunset Camel Trek'",
+          "aDVeNTuRe",
+          "'WACT-AKL-001'",
+          EXIT);
+      assertContains("Successfully created activity");
+      assertContains("'Adventure'");
+      assertDoesNotContain("Activity not created", true);
+    }
   }
 
   @FixMethodOrder(MethodSorters.NAME_ASCENDING)

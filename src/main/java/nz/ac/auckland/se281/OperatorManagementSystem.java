@@ -269,17 +269,25 @@ public class OperatorManagementSystem {
     String createOperatorId = operatorId + "-" + finalId;
 
     if (activityName.trim().length() < 3) {
-      MessageCli.ACTIVITY_NOT_CREATED_INVALID_ACTIVITY_NAME.printMessage(activityName);
+      MessageCli.ACTIVITY_NOT_CREATED_INVALID_ACTIVITY_NAME.printMessage(activityName.trim());
       return;
     }
 
     for (OperatorSearch operator : operators) {
       if (operator.getId().equals(operatorId)) {
+        String matchedType = "Other";
+        for (ActivityType type : ActivityType.values()) {
+          if (type.name().equalsIgnoreCase(activityType)) {
+            matchedType = type.toString();
+          }
+        }
+
         activities.add(
             new OperatorActivity(
-                activityName, createOperatorId, activityType, operator.getName(), operatorId));
+                activityName, createOperatorId, matchedType, operator.getName(), operatorId));
+
         MessageCli.ACTIVITY_CREATED.printMessage(
-            activityName, createOperatorId, activityType, operator.getName());
+            activityName.trim(), createOperatorId, matchedType, operator.getName());
         return;
       }
     }
