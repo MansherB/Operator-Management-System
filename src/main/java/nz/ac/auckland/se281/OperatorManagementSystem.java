@@ -8,6 +8,7 @@ public class OperatorManagementSystem {
 
   private ArrayList<OperatorSearch> operators;
   private ArrayList<OperatorActivity> activities = new ArrayList<>();
+  private ArrayList<Reviews> reviews = new ArrayList<>();
 
   // Do not change the parameters of the constructor
   public OperatorManagementSystem() {
@@ -381,7 +382,13 @@ public class OperatorManagementSystem {
   }
 
   public void displayReviews(String activityId) {
-    // TODO implement
+    for (OperatorActivity activity : activities) {
+      if (activity.getActivityId().equals(activityId)) {
+        String activityName = activity.getName();
+        MessageCli.REVIEWS_FOUND.printMessage("are", "no", "s", activityName);
+        return;
+      }
+    }
   }
 
   public void endorseReview(String reviewId) {
