@@ -281,7 +281,6 @@ public class OperatorManagementSystem {
             matchedType = type.toString();
           }
         }
-
         activities.add(
             new OperatorActivity(
                 activityName, createOperatorId, matchedType, operator.getName(), operatorId));
@@ -315,15 +314,34 @@ public class OperatorManagementSystem {
       }
     }
 
-    Location locationKeyword = Location.fromString(keyword);
-    if (locationKeyword != null) {
-      String fullLocationName = locationKeyword.getFullName();
-      for (OperatorSearch operator : operators) {
-        if (operator.getLocation().equals(fullLocationName)) {
+    Location locationKeyword = Location.fromString(keyword.trim().toLowerCase());
+
+    for (OperatorSearch operator : operators) {
+      if (locationKeyword != null) {
+        String fullLocationName = locationKeyword.getFullName().trim().toLowerCase();
+        String abbLocationName = locationKeyword.getLocationAbbreviation().trim().toLowerCase();
+
+        // Comparing fullname and abbreviation name
+        if (operator.getLocation().toLowerCase().contains(fullLocationName)
+            || operator.getLocationAbbreviation().toLowerCase().contains(abbLocationName)) {
           for (OperatorActivity activity : activities) {
             if (activity.getOperatorId().equals(operator.getId())) {
               matchingWord.add(activity);
             }
+          }
+          continue; // If matched, continue to next operator
+        }
+      }
+
+      // Comparing partial name and partial abbreviation name
+      if (operator.getLocation().toLowerCase().contains(keyword.trim().toLowerCase())
+          || operator
+              .getLocationAbbreviation()
+              .toLowerCase()
+              .contains(keyword.trim().toLowerCase())) {
+        for (OperatorActivity activity : activities) {
+          if (activity.getOperatorId().equals(operator.getId())) {
+            matchingWord.add(activity);
           }
         }
       }

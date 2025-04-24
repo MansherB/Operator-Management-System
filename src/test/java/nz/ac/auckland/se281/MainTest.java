@@ -657,6 +657,66 @@ public class MainTest {
       assertContains("'Adventure'");
       assertDoesNotContain("Activity not created", true);
     }
+
+    // test whether searching activities with partial matching works
+    @Test
+    public void T2_19_search_activities_partial_matching() throws Exception {
+      runCommands(
+          unpack(
+              CREATE_14_OPERATORS,
+              CREATE_27_ACTIVITIES,
+              SEARCH_ACTIVITIES,
+              "'eaCH CAmel'",
+              SEARCH_ACTIVITIES,
+              "'aDVen'",
+              SEARCH_ACTIVITIES,
+              "dunED",
+              EXIT));
+      assertContains("There is 1 matching activity found:");
+      assertContains(
+          "  * Bethells Beach Camel Trek: [WACT-AKL-001-001/Adventure] offered by West Auckland"
+              + " Camel Treks");
+      assertContains("There are 5 matching activities found:");
+      assertContains(
+          "  * Bethells Beach Camel Trek: [WACT-AKL-001-001/Adventure] offered by West Auckland"
+              + " Camel Treks");
+      assertContains(
+          "  * Sky Tower Base Jumping: [WACT-AKL-001-002/Adventure] offered by West Auckland"
+              + " Camel Treks");
+      assertContains(
+          "  * The Frodo Jump: [HST-HLZ-002-001/Adventure] offered by Hobbiton Skydiving Tours");
+      assertContains(
+          "  * River Rush: [ARWR-CHC-002-003/Adventure] offered by Avon River Whitewater"
+              + " Rafting");
+      assertContains(
+          "  * Snowy Slide: [DPP-DUD-001-003/Adventure] offered by Dunedin Penguin Parade");
+      assertContains("There are 3 matching activities found:");
+      assertContains("* Penguin Pies: [DPP-DUD-001-001/Food] offered by Dunedin Penguin Parade");
+      assertContains(
+          "  * Waddling Wonders: [DPP-DUD-001-002/Wildlife] offered by Dunedin Penguin Parade");
+      assertContains(
+          "  * Snowy Slide: [DPP-DUD-001-003/Adventure] offered by Dunedin Penguin Parade");
+      assertDoesNotContain("There are no matching activities found.", true);
+    }
+
+    // Test whether the keyword is trimmed when searching for activities
+    @Test
+    public void T2_20_search_activities_surrounding_spaces() throws Exception {
+      runCommands(
+          unpack(
+              CREATE_14_OPERATORS,
+              CREATE_27_ACTIVITIES,
+              SEARCH_ACTIVITIES,
+              "'     Auckland     '",
+              // "Auckland",
+              EXIT));
+      assertContains("There are 4 matching activities found:");
+      assertContains("Bethells Beach Camel Trek");
+      assertContains("Sky Tower Base Jumping");
+      assertContains("Flaming Feast");
+      assertContains("Lava Lookout Walk");
+      assertDoesNotContain("There are no matching activities found.", true);
+    }
   }
 
   @FixMethodOrder(MethodSorters.NAME_ASCENDING)
