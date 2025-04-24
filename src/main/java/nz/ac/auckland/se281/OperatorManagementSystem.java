@@ -370,7 +370,14 @@ public class OperatorManagementSystem {
   }
 
   public void addPublicReview(String activityId, String[] options) {
-    // TODO implement
+    for (OperatorActivity activity : activities) {
+      if (activity.getActivityId().equals(activityId)) {
+        String activityName = activity.getName();
+        MessageCli.REVIEW_ADDED.printMessage("Public", activityId, activityName);
+        return;
+      }
+    }
+    MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
   }
 
   public void addPrivateReview(String activityId, String[] options) {
