@@ -381,29 +381,15 @@ public class OperatorManagementSystem {
     return activityId + "-" + "R" + id;
   }
 
-  public class PrivateReview extends Reviews {
-    public PrivateReview(String reviewId, String activityId) {
-      super(reviewId, activityId);
-    }
-  }
-
-  public class ExpertReview extends Reviews {
-    public ExpertReview(String reviewId, String activityId) {
-      super(reviewId, activityId);
-    }
-  }
-
-  public class PublicReview extends Reviews {
-    public PublicReview(String reviewId, String activityId) {
-      super(reviewId, activityId);
-    }
-  }
-
   public void addPublicReview(String activityId, String[] options) {
+    String reviewId = generateReviewId(activityId);
+    PublicReview review = new PublicReview(reviewId, activityId, options);
+    reviews.add(review);
+
     for (OperatorActivity activity : activities) {
       if (activity.getActivityId().equals(activityId)) {
         String activityName = activity.getName();
-        MessageCli.REVIEW_ADDED.printMessage("Public", activityId, activityName);
+        MessageCli.REVIEW_ADDED.printMessage("Public", reviewId, activityName);
         return;
       }
     }
@@ -443,6 +429,31 @@ public class OperatorManagementSystem {
   }
 
   public void displayReviews(String activityId) {
+    for (Reviews review : reviews) {
+      // Check if the review is an instance of PublicReview
+      if (review instanceof PublicReview) {
+        // Casting the review to PublicReview
+        PublicReview publicReview = (PublicReview) review;
+
+        // Accessing the rating, name and text using the getters from Publicreview class
+        String rating = publicReview.getRating();
+        String name = publicReview.getClientName();
+        String text = publicReview.getText();
+
+        // Iterate through activities and find the matching activity
+        for (OperatorActivity activity : activities) {
+          if (activity.getActivityId().equals(activityId)) {
+            String activityName = activity.getName();
+            MessageCli.REVIEWS_FOUND.printMessage("is", "1", "", activityName);
+            MessageCli.REVIEW_ENTRY_HEADER.printMessage(
+                rating, "5", "Public", review.getReviewId(), name);
+            MessageCli.REVIEW_ENTRY_REVIEW_TEXT.printMessage(text);
+            return;
+          }
+        }
+      }
+    }
+    // If no matching review for the activity
     for (OperatorActivity activity : activities) {
       if (activity.getActivityId().equals(activityId)) {
         String activityName = activity.getName();
