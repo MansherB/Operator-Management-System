@@ -369,6 +369,36 @@ public class OperatorManagementSystem {
     }
   }
 
+  // Helper method to generate a review ID based on activity ID and existing review count for that
+  // activity
+  private String generateReviewId(String activityId) {
+    int id = 1;
+    for (Reviews review : reviews) {
+      if (review.getActivityId().equals(activityId)) {
+        id++;
+      }
+    }
+    return activityId + "-" + "R" + id;
+  }
+
+  public class PrivateReview extends Reviews {
+    public PrivateReview(String reviewId, String activityId) {
+      super(reviewId, activityId);
+    }
+  }
+
+  public class ExpertReview extends Reviews {
+    public ExpertReview(String reviewId, String activityId) {
+      super(reviewId, activityId);
+    }
+  }
+
+  public class PublicReview extends Reviews {
+    public PublicReview(String reviewId, String activityId) {
+      super(reviewId, activityId);
+    }
+  }
+
   public void addPublicReview(String activityId, String[] options) {
     for (OperatorActivity activity : activities) {
       if (activity.getActivityId().equals(activityId)) {
@@ -381,11 +411,35 @@ public class OperatorManagementSystem {
   }
 
   public void addPrivateReview(String activityId, String[] options) {
-    // TODO implement
+
+    String reviewId = generateReviewId(activityId);
+    PrivateReview review = new PrivateReview(reviewId, activityId);
+    reviews.add(review);
+
+    for (OperatorActivity activity : activities) {
+      if (activity.getActivityId().equals(activityId)) {
+        String activityName = activity.getName();
+        MessageCli.REVIEW_ADDED.printMessage("Private", reviewId, activityName);
+        return;
+      }
+    }
+    MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
   }
 
   public void addExpertReview(String activityId, String[] options) {
-    // TODO implement
+
+    String reviewId = generateReviewId(activityId);
+    ExpertReview review = new ExpertReview(reviewId, activityId);
+    reviews.add(review);
+
+    for (OperatorActivity activity : activities) {
+      if (activity.getActivityId().equals(activityId)) {
+        String activityName = activity.getName();
+        MessageCli.REVIEW_ADDED.printMessage("Expert", reviewId, activityName);
+        return;
+      }
+    }
+    MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
   }
 
   public void displayReviews(String activityId) {
