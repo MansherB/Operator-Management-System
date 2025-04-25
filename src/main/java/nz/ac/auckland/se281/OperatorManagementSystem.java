@@ -468,6 +468,10 @@ public class OperatorManagementSystem {
               rating, "5", "Public", review.getReviewId(), name);
         }
 
+        if (review.isEndorsed()) {
+          MessageCli.REVIEW_ENTRY_ENDORSED.printMessage();
+        }
+
         MessageCli.REVIEW_ENTRY_REVIEW_TEXT.printMessage(text);
 
       } else if (review instanceof PrivateReview) {
@@ -513,7 +517,15 @@ public class OperatorManagementSystem {
   }
 
   public void endorseReview(String reviewId) {
-    // TODO implement
+    for (Reviews review : reviews) {
+      if (review.getReviewId().equals(reviewId)) {
+        review.setEndorsed(true);
+        MessageCli.REVIEW_ENDORSED.printMessage(reviewId);
+
+        return;
+      }
+    }
+    MessageCli.REVIEW_NOT_FOUND.printMessage(reviewId);
   }
 
   public void resolveReview(String reviewId, String response) {
