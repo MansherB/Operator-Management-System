@@ -458,9 +458,16 @@ public class OperatorManagementSystem {
         String rating = publicReview.getRating();
         String name = publicReview.getClientName();
         String text = publicReview.getText();
+        String anonymous = publicReview.getAnonymous();
 
-        MessageCli.REVIEW_ENTRY_HEADER.printMessage(
-            rating, "5", "Public", review.getReviewId(), name);
+        if (anonymous.equalsIgnoreCase("y")) {
+          MessageCli.REVIEW_ENTRY_HEADER.printMessage(
+              rating, "5", "Public", review.getReviewId(), "Anonymous");
+        } else {
+          MessageCli.REVIEW_ENTRY_HEADER.printMessage(
+              rating, "5", "Public", review.getReviewId(), name);
+        }
+
         MessageCli.REVIEW_ENTRY_REVIEW_TEXT.printMessage(text);
 
       } else if (review instanceof PrivateReview) {

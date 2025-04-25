@@ -4,12 +4,18 @@ public class PublicReview extends Reviews {
   private String rating;
   private String clientName;
   private String reviewText;
+  private String anonymous;
 
   public PublicReview(String reviewId, String activityId, String[] options) {
     super(reviewId, activityId);
     rating = options[2];
     clientName = options[0];
     reviewText = options[3];
+    anonymous = options[1];
+  }
+
+  public String getAnonymous() {
+    return anonymous;
   }
 
   public String getReviewId() {
