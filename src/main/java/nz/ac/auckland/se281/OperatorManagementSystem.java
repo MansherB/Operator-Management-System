@@ -415,7 +415,7 @@ public class OperatorManagementSystem {
   public void addExpertReview(String activityId, String[] options) {
 
     String reviewId = generateReviewId(activityId);
-    ExpertReview review = new ExpertReview(reviewId, activityId);
+    ExpertReview review = new ExpertReview(reviewId, activityId, options);
     reviews.add(review);
 
     for (OperatorActivity activity : activities) {
@@ -429,75 +429,79 @@ public class OperatorManagementSystem {
   }
 
   public void displayReviews(String activityId) {
-    for (Reviews review : reviews) {
-      // Check if the review is an instance of PublicReview
-      if (review instanceof PublicReview) {
-        // Casting the review to PublicReview
-        PublicReview publicReview = (PublicReview) review;
+    int count = 0;
+    String activityName = "";
 
-        // Accessing the rating, name and text using the getters from Publicreview class
+    // Finding activity name from the activityId
+    for (OperatorActivity activity : activities) {
+      if (activity.getActivityId().equals(activityId)) {
+        activityName = activity.getName();
+        break;
+      }
+    }
+
+    for (Reviews review : reviews) {
+      // Matching review with activity
+      if (!review.getActivityId().equals(activityId)) {
+        continue;
+      }
+
+      count++;
+
+      // Base case
+      if (count == 1) {
+        MessageCli.REVIEWS_FOUND.printMessage("is", "1", "", activityName);
+      }
+
+      if (review instanceof PublicReview) {
+        PublicReview publicReview = (PublicReview) review;
         String rating = publicReview.getRating();
         String name = publicReview.getClientName();
         String text = publicReview.getText();
 
-        ArrayList<OperatorActivity> matchingReview = new ArrayList<>();
+        MessageCli.REVIEW_ENTRY_HEADER.printMessage(
+            rating, "5", "Public", review.getReviewId(), name);
+        MessageCli.REVIEW_ENTRY_REVIEW_TEXT.printMessage(text);
 
-        // Iterate through activities and find the matching activity
-        for (OperatorActivity activity : activities) {
-          if (activity.getActivityId().equals(activityId)) {
-            matchingReview.add(activity);
-            String activityName = activity.getName();
-            Integer numberOfReviews = matchingReview.size();
-            MessageCli.REVIEWS_FOUND.printMessage(
-                "is", numberOfReviews.toString(), "", activityName);
-            MessageCli.REVIEW_ENTRY_HEADER.printMessage(
-                rating, "5", "Public", review.getReviewId(), name);
-            MessageCli.REVIEW_ENTRY_REVIEW_TEXT.printMessage(text);
-            return;
-          }
-        }
       } else if (review instanceof PrivateReview) {
         PrivateReview privateReview = (PrivateReview) review;
-
         String rating = privateReview.getRating();
         String name = privateReview.getClientName();
         String text = privateReview.getText();
         String followUp = privateReview.getFollowUp();
         String email = privateReview.getEmail();
 
-        ArrayList<OperatorActivity> matchingReview = new ArrayList<>();
+        MessageCli.REVIEW_ENTRY_HEADER.printMessage(
+            rating, "5", "Private", review.getReviewId(), name);
 
-        for (OperatorActivity activity : activities) {
-          if (activity.getActivityId().equals(activityId)) {
-            matchingReview.add(activity);
-            String activityName = activity.getName();
-            Integer numberOfReviews = matchingReview.size();
-            MessageCli.REVIEWS_FOUND.printMessage(
-                "is", numberOfReviews.toString(), "", activityName);
-            if (followUp.equalsIgnoreCase("n")) {
-              MessageCli.REVIEW_ENTRY_HEADER.printMessage(
-                  rating, "5", "Private", review.getReviewId(), name);
-              MessageCli.REVIEW_ENTRY_RESOLVED.printMessage("-");
-            } else {
-              MessageCli.REVIEW_ENTRY_HEADER.printMessage(
-                  rating, "5", "Private", review.getReviewId(), name);
-              MessageCli.REVIEW_ENTRY_FOLLOW_UP.printMessage(email);
-            }
+        if (followUp.equalsIgnoreCase("n")) {
+          MessageCli.REVIEW_ENTRY_RESOLVED.printMessage("-");
+        } else {
+          MessageCli.REVIEW_ENTRY_FOLLOW_UP.printMessage(email);
+        }
 
-            MessageCli.REVIEW_ENTRY_REVIEW_TEXT.printMessage(text);
-            return;
-          }
+        MessageCli.REVIEW_ENTRY_REVIEW_TEXT.printMessage(text);
+
+      } else if (review instanceof ExpertReview) {
+        ExpertReview expertReview = (ExpertReview) review;
+        String rating = expertReview.getRating();
+        String name = expertReview.getClientName();
+        String text = expertReview.getText();
+        String recommendation = expertReview.getRecommendation();
+
+        MessageCli.REVIEW_ENTRY_HEADER.printMessage(
+            rating, "5", "Expert", review.getReviewId(), name);
+        MessageCli.REVIEW_ENTRY_REVIEW_TEXT.printMessage(text);
+
+        if (recommendation.equalsIgnoreCase("y")) {
+          MessageCli.REVIEW_ENTRY_RECOMMENDED.printMessage(text);
         }
       }
     }
 
-    // If no matching review for the activity
-    for (OperatorActivity activity : activities) {
-      if (activity.getActivityId().equals(activityId)) {
-        String activityName = activity.getName();
-        MessageCli.REVIEWS_FOUND.printMessage("are", "no", "s", activityName);
-        return;
-      }
+    // No reviews found
+    if (count == 0) {
+      MessageCli.REVIEWS_FOUND.printMessage("are", "no", "s", activityName);
     }
   }
 
