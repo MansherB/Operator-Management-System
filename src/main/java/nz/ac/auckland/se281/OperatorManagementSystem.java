@@ -9,6 +9,7 @@ public class OperatorManagementSystem {
   private ArrayList<OperatorSearch> operators;
   private ArrayList<OperatorActivity> activities = new ArrayList<>();
   private ArrayList<Reviews> reviews = new ArrayList<>();
+  ArrayList<String> multipleImages = new ArrayList<>();
 
   // Do not change the parameters of the constructor
   public OperatorManagementSystem() {
@@ -510,7 +511,8 @@ public class OperatorManagementSystem {
           MessageCli.REVIEW_ENTRY_RECOMMENDED.printMessage(text);
         }
         if (review.isImage()) {
-          MessageCli.REVIEW_ENTRY_IMAGES.printMessage(expertReview.getImageName());
+          String imagesString = String.join(",", multipleImages);
+          MessageCli.REVIEW_ENTRY_IMAGES.printMessage(imagesString);
         }
       }
     }
@@ -553,8 +555,10 @@ public class OperatorManagementSystem {
 
       if (review.getReviewId().equals(reviewId)) {
         review.setImage(true);
+
+        multipleImages.add(imageName);
         MessageCli.REVIEW_IMAGE_ADDED.printMessage(imageName, reviewId);
-        review.setResolved(true);
+
         return;
       }
     }
