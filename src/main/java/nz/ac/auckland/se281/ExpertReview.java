@@ -6,6 +6,7 @@ public class ExpertReview extends Reviews {
   private String clientName;
   private String reviewText;
   private String recommendation;
+  private String imageName;
 
   public ExpertReview(String reviewId, String activityId, String[] options) {
     super(reviewId, activityId);
@@ -13,6 +14,14 @@ public class ExpertReview extends Reviews {
     clientName = options[0];
     reviewText = options[2];
     recommendation = options[3];
+  }
+
+  public void setImageName(String imageName) {
+    this.imageName = imageName;
+  }
+
+  public String getImageName() {
+    return imageName;
   }
 
   public String getRecommendation() {

@@ -494,9 +494,6 @@ public class OperatorManagementSystem {
         }
 
         MessageCli.REVIEW_ENTRY_REVIEW_TEXT.printMessage(text);
-        // if (review.isResolved()) {
-        //   MessageCli.REVIEW_ENTRY_RESOLVED.printMessage("So sorry to hear that!");
-        // }
 
       } else if (review instanceof ExpertReview) {
         ExpertReview expertReview = (ExpertReview) review;
@@ -511,6 +508,9 @@ public class OperatorManagementSystem {
 
         if (recommendation.equalsIgnoreCase("y")) {
           MessageCli.REVIEW_ENTRY_RECOMMENDED.printMessage(text);
+        }
+        if (review.isImage()) {
+          MessageCli.REVIEW_ENTRY_IMAGES.printMessage(expertReview.getImageName());
         }
       }
     }
@@ -545,7 +545,20 @@ public class OperatorManagementSystem {
   }
 
   public void uploadReviewImage(String reviewId, String imageName) {
-    // TODO implement
+    for (Reviews review : reviews) {
+      if (review instanceof ExpertReview) {
+        ExpertReview expert = (ExpertReview) review;
+        expert.setImageName(imageName);
+      }
+
+      if (review.getReviewId().equals(reviewId)) {
+        review.setImage(true);
+        MessageCli.REVIEW_IMAGE_ADDED.printMessage(imageName, reviewId);
+        review.setResolved(true);
+        return;
+      }
+    }
+    MessageCli.REVIEW_NOT_FOUND.printMessage(reviewId);
   }
 
   public void displayTopActivities() {

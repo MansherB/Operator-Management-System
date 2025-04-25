@@ -5,10 +5,19 @@ public abstract class Reviews {
   protected String activityId;
   private boolean endorsed = false;
   private boolean resolved = false;
+  private boolean image = false;
 
   public Reviews(String reviewId, String activityId) {
     this.reviewId = reviewId;
     this.activityId = activityId;
+  }
+
+  public void setImage(boolean image) {
+    this.image = image;
+  }
+
+  public boolean isImage() {
+    return image;
   }
 
   public void setEndorsed(boolean endorsed) {
