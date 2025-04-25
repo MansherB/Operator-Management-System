@@ -487,11 +487,16 @@ public class OperatorManagementSystem {
 
         if (followUp.equalsIgnoreCase("n")) {
           MessageCli.REVIEW_ENTRY_RESOLVED.printMessage("-");
+        } else if (review.isResolved()) {
+          MessageCli.REVIEW_ENTRY_RESOLVED.printMessage("So sorry to hear that!");
         } else {
           MessageCli.REVIEW_ENTRY_FOLLOW_UP.printMessage(email);
         }
 
         MessageCli.REVIEW_ENTRY_REVIEW_TEXT.printMessage(text);
+        // if (review.isResolved()) {
+        //   MessageCli.REVIEW_ENTRY_RESOLVED.printMessage("So sorry to hear that!");
+        // }
 
       } else if (review instanceof ExpertReview) {
         ExpertReview expertReview = (ExpertReview) review;
@@ -529,7 +534,14 @@ public class OperatorManagementSystem {
   }
 
   public void resolveReview(String reviewId, String response) {
-    // TODO implement
+    for (Reviews review : reviews) {
+      if (review.getReviewId().equals(reviewId)) {
+        MessageCli.REVIEW_RESOLVED.printMessage(reviewId);
+        review.setResolved(true);
+        return;
+      }
+    }
+    MessageCli.REVIEW_NOT_FOUND.printMessage(reviewId);
   }
 
   public void uploadReviewImage(String reviewId, String imageName) {

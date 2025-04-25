@@ -4,6 +4,7 @@ public abstract class Reviews {
   protected String reviewId;
   protected String activityId;
   private boolean endorsed = false;
+  private boolean resolved = false;
 
   public Reviews(String reviewId, String activityId) {
     this.reviewId = reviewId;
@@ -16,6 +17,14 @@ public abstract class Reviews {
 
   public boolean isEndorsed() {
     return endorsed;
+  }
+
+  public void setResolved(boolean resolved) {
+    this.resolved = resolved;
+  }
+
+  public boolean isResolved() {
+    return resolved;
   }
 
   public String getReviewId() {
