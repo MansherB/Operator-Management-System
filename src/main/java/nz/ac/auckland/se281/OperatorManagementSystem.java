@@ -453,10 +453,27 @@ public class OperatorManagementSystem {
       }
     }
 
-    // Check if activity exists
+    // Checking if activity exists
     if (!activityFound) {
       MessageCli.ACTIVITY_NOT_FOUND.printMessage(activityId);
       return;
+    }
+
+    // Counting matching reviews
+    for (Reviews review : reviews) {
+      if (review.getActivityId().equals(activityId)) {
+        count++;
+      }
+    }
+
+    // Displaying review count message
+    if (count == 0) {
+      MessageCli.REVIEWS_FOUND.printMessage("are", "no", "s", activityName);
+      return;
+    } else if (count == 1) {
+      MessageCli.REVIEWS_FOUND.printMessage("is", "1", "", activityName);
+    } else {
+      MessageCli.REVIEWS_FOUND.printMessage("are", String.valueOf(count), "s", activityName);
     }
 
     for (Reviews review : reviews) {
@@ -464,11 +481,6 @@ public class OperatorManagementSystem {
       if (!review.getActivityId().equals(activityId)) {
         continue;
       } else count++;
-
-      // Base case
-      if (count == 1) {
-        MessageCli.REVIEWS_FOUND.printMessage("is", "1", "", activityName);
-      }
 
       if (review instanceof PublicReview) {
         PublicReview publicReview = (PublicReview) review;
@@ -537,11 +549,6 @@ public class OperatorManagementSystem {
           MessageCli.REVIEW_ENTRY_IMAGES.printMessage(imagesString);
         }
       }
-    }
-
-    // No reviews found
-    if (count == 0) {
-      MessageCli.REVIEWS_FOUND.printMessage("are", "no", "s", activityName);
     }
   }
 

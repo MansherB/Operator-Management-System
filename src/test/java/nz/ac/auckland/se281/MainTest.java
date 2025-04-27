@@ -1310,6 +1310,35 @@ public class MainTest {
       assertContains("Activity not found: 'WACT-AKL-001-001' is an invalid activity ID.");
       assertDoesNotContain("There are no reviews for activity 'WACT-AKL-001-001'.", true);
     }
+
+    @Test
+    public void T3_27_multiple_reviews_display() throws Exception {
+      runCommands(
+          CREATE_OPERATOR,
+          "'West Auckland Camel Treks'",
+          "'AKL'",
+          CREATE_ACTIVITY,
+          "'Bethells Beach Camel Trek'",
+          "Adventure",
+          "WACT-AKL-001",
+          ADD_PUBLIC_REVIEW,
+          "WACT-AKL-001-001",
+          options("Alice", "n", "3", "Could be better"),
+          ADD_PRIVATE_REVIEW,
+          "WACT-AKL-001-001",
+          options("Bob", "bob@email.com", "4", "Pretty good", "n"),
+          ADD_EXPERT_REVIEW,
+          "WACT-AKL-001-001",
+          options("Clara", "5", "Amazing!", "y"),
+          DISPLAY_REVIEWS,
+          "WACT-AKL-001-001",
+          EXIT);
+      assertContains("There are 3 reviews for activity 'Bethells Beach Camel Trek'");
+      assertContains("[3/5] Public review (WACT-AKL-001-001-R1) by 'Alice'");
+      assertContains("[4/5] Private review (WACT-AKL-001-001-R2) by 'Bob'");
+      assertContains("[5/5] Expert review (WACT-AKL-001-001-R3) by 'Clara'");
+      assertContains("Recommended by experts.");
+    }
   }
 
   private static final Object[] CREATE_14_OPERATORS =
