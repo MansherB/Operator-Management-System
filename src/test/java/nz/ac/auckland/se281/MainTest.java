@@ -1181,7 +1181,7 @@ public class MainTest {
     // this test ensures that the rating limits (only from 1-5) are enforced, and that the rating
     // is saved
     @Test
-    public void T3_02_proper_rating_limits() throws Exception {
+    public void T3_21_proper_rating_limits() throws Exception {
       runCommands(
           CREATE_OPERATOR,
           "'West Auckland Camel Treks'",
@@ -1213,6 +1213,27 @@ public class MainTest {
       assertDoesNotContain("[0/5]");
       assertDoesNotContain("[10/5]");
       assertDoesNotContain("[55/5]");
+    }
+
+    // test that the review being endorsed is a public review
+    @Test
+    public void T3_22_endorse_review_not_public() throws Exception {
+      runCommands(
+          CREATE_OPERATOR,
+          "'West Auckland Camel Treks'",
+          "'AKL'",
+          CREATE_ACTIVITY,
+          "'Bethells Beach Camel Trek'",
+          "Adventure",
+          "WACT-AKL-001",
+          ADD_PRIVATE_REVIEW,
+          "WACT-AKL-001-001",
+          options("Alice", "alice@mail.com", "3", "Could be better", "y"),
+          ENDORSE_REVIEW,
+          "WACT-AKL-001-001-R1",
+          EXIT);
+      assertContains("Review not endorsed: 'WACT-AKL-001-001-R1' is not a public review.");
+      assertDoesNotContain("Review 'WACT-AKL-001-001-R1' endorsed successfully.");
     }
   }
 
