@@ -568,9 +568,8 @@ public class OperatorManagementSystem {
 
   public void displayTopActivities() {
     for (Types.Location location : Types.Location.values()) {
-      boolean reviewFound = false;
-      OperatorActivity foundActivity = null;
-      String rating = "0";
+      OperatorActivity topActivity = null;
+      int topRating = 0;
 
       for (OperatorActivity activity : activities) {
         String[] parts = activity.getActivityId().split("-");
@@ -578,18 +577,33 @@ public class OperatorManagementSystem {
 
         if (locationPart.equalsIgnoreCase(location.name())) {
           for (Reviews review : reviews) {
-            if (review.getActivityId().equals(activity.getActivityId())) {
-
-              foundActivity = activity;
-              rating = ((PublicReview) review).getRating();
+            if (review.getActivityId().equals(activity.getActivityId())
+                && (review instanceof PublicReview)) {
+              int rating = 0;
+              String ratingCheck = ((PublicReview) review).getRating();
+              if (ratingCheck.equals("1")) {
+                rating = 1;
+              } else if (ratingCheck.equals("2")) {
+                rating = 2;
+              } else if (ratingCheck.equals("3")) {
+                rating = 3;
+              } else if (ratingCheck.equals("4")) {
+                rating = 4;
+              } else if (ratingCheck.equals("5")) {
+                rating = 5;
+              }
+              if (rating > topRating) {
+                topRating = rating;
+                topActivity = activity;
+              }
             }
           }
         }
       }
 
-      if (reviewFound) {
+      if (topActivity != null) {
         MessageCli.TOP_ACTIVITY.printMessage(
-            location.getFullName(), foundActivity.getName(), String.valueOf(rating));
+            location.getFullName(), topActivity.getName(), String.valueOf(topRating));
       } else {
         MessageCli.NO_REVIEWED_ACTIVITIES.printMessage(location.getFullName());
       }
