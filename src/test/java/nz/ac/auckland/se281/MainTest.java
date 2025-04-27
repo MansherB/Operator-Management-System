@@ -1256,6 +1256,28 @@ public class MainTest {
       assertContains("Review not found: 'WACT-AKL-001-001-R2' is an invalid review ID.");
       assertDoesNotContain("Review 'WACT-AKL-001-001-R2' endorsed successfully.");
     }
+
+    // test that the review being resolved on is a private review
+    @Test
+    public void T3_24_resolve_review_not_private() throws Exception {
+      runCommands(
+          CREATE_OPERATOR,
+          "'West Auckland Camel Treks'",
+          "'AKL'",
+          CREATE_ACTIVITY,
+          "'Bethells Beach Camel Trek'",
+          "Adventure",
+          "'WACT-AKL-001'",
+          ADD_PUBLIC_REVIEW,
+          "WACT-AKL-001-001",
+          options("Alice", "n", "3", "Could be better"),
+          RESOLVE_REVIEW,
+          "WACT-AKL-001-001-R1",
+          "'So sorry to hear that!'",
+          EXIT);
+      assertContains("Review not resolved: 'WACT-AKL-001-001-R1' is not a private review.");
+      assertDoesNotContain("Review 'WACT-AKL-001-001-R1' resolved successfully.");
+    }
   }
 
   private static final Object[] CREATE_14_OPERATORS =

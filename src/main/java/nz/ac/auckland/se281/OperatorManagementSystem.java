@@ -556,13 +556,16 @@ public class OperatorManagementSystem {
 
   public void resolveReview(String reviewId, String response) {
     for (Reviews review : reviews) {
-      if (review.getReviewId().equals(reviewId)) {
+      if (review.getReviewId().equals(reviewId) && review instanceof PrivateReview) {
         MessageCli.REVIEW_RESOLVED.printMessage(reviewId);
         review.setResolved(true);
         return;
+      } else if (review instanceof PublicReview || review instanceof ExpertReview) {
+        MessageCli.REVIEW_NOT_RESOLVED.printMessage(reviewId);
+      } else {
+        MessageCli.REVIEW_NOT_FOUND.printMessage(reviewId);
       }
     }
-    MessageCli.REVIEW_NOT_FOUND.printMessage(reviewId);
   }
 
   public void uploadReviewImage(String reviewId, String imageName) {
