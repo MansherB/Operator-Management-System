@@ -609,114 +609,6 @@ public class MainTest {
       assertDoesNotContain("There is 1", true);
       assertDoesNotContain("There are 4", true);
     }
-
-    @Test
-    public void T2_16_create_activity_extra_spaces_in_name() throws Exception {
-      runCommands(
-          CREATE_OPERATOR,
-          "'West Auckland Camel Treks'",
-          "'AKL'",
-          CREATE_ACTIVITY,
-          "'     Sunset Camel Trek     '",
-          "Adventure",
-          "'WACT-AKL-001'",
-          EXIT);
-      assertContains("Successfully created activity 'Sunset Camel Trek'");
-      assertDoesNotContain("Successfully created activity '     Sunset Camel Trek     '", true);
-    }
-
-    @Test
-    public void T2_17_create_activity_unknown_activity_type() throws Exception {
-      runCommands(
-          CREATE_OPERATOR,
-          "'West Auckland Camel Treks'",
-          "'AKL'",
-          CREATE_ACTIVITY,
-          "'Sunset Camel Trek'",
-          "ajsdoifjaoisdfjaosidfj",
-          "'WACT-AKL-001'",
-          EXIT);
-      assertContains("Successfully created activity");
-      assertContains("'Other'");
-      assertDoesNotContain("Activity not created", true);
-    }
-
-    // Tests if the activity type is case insensitive
-    @Test
-    public void T2_18_create_activity_random_case_activity_type() throws Exception {
-      runCommands(
-          CREATE_OPERATOR,
-          "'West Auckland Camel Treks'",
-          "'AKL'",
-          CREATE_ACTIVITY,
-          "'Sunset Camel Trek'",
-          "aDVeNTuRe",
-          "'WACT-AKL-001'",
-          EXIT);
-      assertContains("Successfully created activity");
-      assertContains("'Adventure'");
-      assertDoesNotContain("Activity not created", true);
-    }
-
-    // test whether searching activities with partial matching works
-    @Test
-    public void T2_19_search_activities_partial_matching() throws Exception {
-      runCommands(
-          unpack(
-              CREATE_14_OPERATORS,
-              CREATE_27_ACTIVITIES,
-              SEARCH_ACTIVITIES,
-              "'eaCH CAmel'",
-              SEARCH_ACTIVITIES,
-              "'aDVen'",
-              SEARCH_ACTIVITIES,
-              "dunED",
-              EXIT));
-      assertContains("There is 1 matching activity found:");
-      assertContains(
-          "  * Bethells Beach Camel Trek: [WACT-AKL-001-001/Adventure] offered by West Auckland"
-              + " Camel Treks");
-      assertContains("There are 5 matching activities found:");
-      assertContains(
-          "  * Bethells Beach Camel Trek: [WACT-AKL-001-001/Adventure] offered by West Auckland"
-              + " Camel Treks");
-      assertContains(
-          "  * Sky Tower Base Jumping: [WACT-AKL-001-002/Adventure] offered by West Auckland"
-              + " Camel Treks");
-      assertContains(
-          "  * The Frodo Jump: [HST-HLZ-002-001/Adventure] offered by Hobbiton Skydiving Tours");
-      assertContains(
-          "  * River Rush: [ARWR-CHC-002-003/Adventure] offered by Avon River Whitewater"
-              + " Rafting");
-      assertContains(
-          "  * Snowy Slide: [DPP-DUD-001-003/Adventure] offered by Dunedin Penguin Parade");
-      assertContains("There are 3 matching activities found:");
-      assertContains("* Penguin Pies: [DPP-DUD-001-001/Food] offered by Dunedin Penguin Parade");
-      assertContains(
-          "  * Waddling Wonders: [DPP-DUD-001-002/Wildlife] offered by Dunedin Penguin Parade");
-      assertContains(
-          "  * Snowy Slide: [DPP-DUD-001-003/Adventure] offered by Dunedin Penguin Parade");
-      assertDoesNotContain("There are no matching activities found.", true);
-    }
-
-    // Test whether the keyword is trimmed when searching for activities
-    @Test
-    public void T2_20_search_activities_surrounding_spaces() throws Exception {
-      runCommands(
-          unpack(
-              CREATE_14_OPERATORS,
-              CREATE_27_ACTIVITIES,
-              SEARCH_ACTIVITIES,
-              "'     Auckland     '",
-              // "Auckland",
-              EXIT));
-      assertContains("There are 4 matching activities found:");
-      assertContains("Bethells Beach Camel Trek");
-      assertContains("Sky Tower Base Jumping");
-      assertContains("Flaming Feast");
-      assertContains("Lava Lookout Walk");
-      assertDoesNotContain("There are no matching activities found.", true);
-    }
   }
 
   @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -1179,7 +1071,149 @@ public class MainTest {
     public void reset() {}
 
     @Test
-    public void T4_01_add_your_own_tests_as_needed() throws Exception {}
+    public void T2_16_create_activity_extra_spaces_in_name() throws Exception {
+      runCommands(
+          CREATE_OPERATOR,
+          "'West Auckland Camel Treks'",
+          "'AKL'",
+          CREATE_ACTIVITY,
+          "'     Sunset Camel Trek     '",
+          "Adventure",
+          "'WACT-AKL-001'",
+          EXIT);
+      assertContains("Successfully created activity 'Sunset Camel Trek'");
+      assertDoesNotContain("Successfully created activity '     Sunset Camel Trek     '", true);
+    }
+
+    @Test
+    public void T2_17_create_activity_unknown_activity_type() throws Exception {
+      runCommands(
+          CREATE_OPERATOR,
+          "'West Auckland Camel Treks'",
+          "'AKL'",
+          CREATE_ACTIVITY,
+          "'Sunset Camel Trek'",
+          "ajsdoifjaoisdfjaosidfj",
+          "'WACT-AKL-001'",
+          EXIT);
+      assertContains("Successfully created activity");
+      assertContains("'Other'");
+      assertDoesNotContain("Activity not created", true);
+    }
+
+    // Tests if the activity type is case insensitive
+    @Test
+    public void T2_18_create_activity_random_case_activity_type() throws Exception {
+      runCommands(
+          CREATE_OPERATOR,
+          "'West Auckland Camel Treks'",
+          "'AKL'",
+          CREATE_ACTIVITY,
+          "'Sunset Camel Trek'",
+          "aDVeNTuRe",
+          "'WACT-AKL-001'",
+          EXIT);
+      assertContains("Successfully created activity");
+      assertContains("'Adventure'");
+      assertDoesNotContain("Activity not created", true);
+    }
+
+    // test whether searching activities with partial matching works
+    @Test
+    public void T2_19_search_activities_partial_matching() throws Exception {
+      runCommands(
+          unpack(
+              CREATE_14_OPERATORS,
+              CREATE_27_ACTIVITIES,
+              SEARCH_ACTIVITIES,
+              "'eaCH CAmel'",
+              SEARCH_ACTIVITIES,
+              "'aDVen'",
+              SEARCH_ACTIVITIES,
+              "dunED",
+              EXIT));
+      assertContains("There is 1 matching activity found:");
+      assertContains(
+          "  * Bethells Beach Camel Trek: [WACT-AKL-001-001/Adventure] offered by West Auckland"
+              + " Camel Treks");
+      assertContains("There are 5 matching activities found:");
+      assertContains(
+          "  * Bethells Beach Camel Trek: [WACT-AKL-001-001/Adventure] offered by West Auckland"
+              + " Camel Treks");
+      assertContains(
+          "  * Sky Tower Base Jumping: [WACT-AKL-001-002/Adventure] offered by West Auckland"
+              + " Camel Treks");
+      assertContains(
+          "  * The Frodo Jump: [HST-HLZ-002-001/Adventure] offered by Hobbiton Skydiving Tours");
+      assertContains(
+          "  * River Rush: [ARWR-CHC-002-003/Adventure] offered by Avon River Whitewater"
+              + " Rafting");
+      assertContains(
+          "  * Snowy Slide: [DPP-DUD-001-003/Adventure] offered by Dunedin Penguin Parade");
+      assertContains("There are 3 matching activities found:");
+      assertContains("* Penguin Pies: [DPP-DUD-001-001/Food] offered by Dunedin Penguin Parade");
+      assertContains(
+          "  * Waddling Wonders: [DPP-DUD-001-002/Wildlife] offered by Dunedin Penguin Parade");
+      assertContains(
+          "  * Snowy Slide: [DPP-DUD-001-003/Adventure] offered by Dunedin Penguin Parade");
+      assertDoesNotContain("There are no matching activities found.", true);
+    }
+
+    // Test whether the keyword is trimmed when searching for activities
+    @Test
+    public void T2_20_search_activities_surrounding_spaces() throws Exception {
+      runCommands(
+          unpack(
+              CREATE_14_OPERATORS,
+              CREATE_27_ACTIVITIES,
+              SEARCH_ACTIVITIES,
+              "'     Auckland     '",
+              // "Auckland",
+              EXIT));
+      assertContains("There are 4 matching activities found:");
+      assertContains("Bethells Beach Camel Trek");
+      assertContains("Sky Tower Base Jumping");
+      assertContains("Flaming Feast");
+      assertContains("Lava Lookout Walk");
+      assertDoesNotContain("There are no matching activities found.", true);
+    }
+
+    // this test ensures that the rating limits (only from 1-5) are enforced, and that the rating
+    // is saved
+    @Test
+    public void T3_02_proper_rating_limits() throws Exception {
+      runCommands(
+          CREATE_OPERATOR,
+          "'West Auckland Camel Treks'",
+          "'AKL'",
+          CREATE_ACTIVITY,
+          "'Bethells Beach Camel Trek'",
+          "Adventure",
+          "'WACT-AKL-001'",
+          ADD_PUBLIC_REVIEW,
+          "WACT-AKL-001-001",
+          options("Alice", "n", "0", "I absolutely hated it! They scammed us!!1"),
+          ADD_PRIVATE_REVIEW,
+          "WACT-AKL-001-001",
+          options("Bob", "bob@email.com", "10", "I loved it! 10/10", "n"),
+          ADD_EXPERT_REVIEW,
+          "WACT-AKL-001-001",
+          options(
+              "Clara",
+              "6",
+              "I enjoyed it, but the wait times were quite long, and the customer service wasn't"
+                  + " the best, so my rating drops from a 8/10 to a 6/10",
+              "n"),
+          DISPLAY_REVIEWS,
+          "WACT-AKL-001-001",
+          EXIT);
+      assertContains("[1/5] Public review (WACT-AKL-001-001-R1) by 'Alice'");
+      assertContains("[5/5] Private review (WACT-AKL-001-001-R2) by 'Bob'");
+      assertContains("[5/5] Expert review (WACT-AKL-001-001-R3) by 'Clara'");
+      assertDoesNotContain("[0/5]");
+      assertDoesNotContain("[10/5]");
+      assertDoesNotContain("[55/5]");
+    }
   }
 
   private static final Object[] CREATE_14_OPERATORS =

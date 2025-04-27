@@ -466,17 +466,19 @@ public class OperatorManagementSystem {
 
       if (review instanceof PublicReview) {
         PublicReview publicReview = (PublicReview) review;
-        String rating = publicReview.getRating();
+        Integer rating = Integer.parseInt(publicReview.getRating());
         String name = publicReview.getClientName();
         String text = publicReview.getText();
         String anonymous = publicReview.getAnonymous();
+        if (rating < 1) rating = 1;
+        if (rating > 5) rating = 5;
 
         if (anonymous.equalsIgnoreCase("y")) {
           MessageCli.REVIEW_ENTRY_HEADER.printMessage(
-              rating, "5", "Public", review.getReviewId(), "Anonymous");
+              String.valueOf(rating), "5", "Public", review.getReviewId(), "Anonymous");
         } else {
           MessageCli.REVIEW_ENTRY_HEADER.printMessage(
-              rating, "5", "Public", review.getReviewId(), name);
+              String.valueOf(rating), "5", "Public", review.getReviewId(), name);
         }
 
         if (review.isEndorsed()) {
@@ -487,14 +489,16 @@ public class OperatorManagementSystem {
 
       } else if (review instanceof PrivateReview) {
         PrivateReview privateReview = (PrivateReview) review;
-        String rating = privateReview.getRating();
+        Integer rating = Integer.parseInt(privateReview.getRating());
         String name = privateReview.getClientName();
         String text = privateReview.getText();
         String followUp = privateReview.getFollowUp();
         String email = privateReview.getEmail();
+        if (rating < 1) rating = 1;
+        if (rating > 5) rating = 5;
 
         MessageCli.REVIEW_ENTRY_HEADER.printMessage(
-            rating, "5", "Private", review.getReviewId(), name);
+            String.valueOf(rating), "5", "Private", review.getReviewId(), name);
 
         if (followUp.equalsIgnoreCase("n")) {
           MessageCli.REVIEW_ENTRY_RESOLVED.printMessage("-");
@@ -508,13 +512,15 @@ public class OperatorManagementSystem {
 
       } else if (review instanceof ExpertReview) {
         ExpertReview expertReview = (ExpertReview) review;
-        String rating = expertReview.getRating();
+        Integer rating = Integer.parseInt(expertReview.getRating());
         String name = expertReview.getClientName();
         String text = expertReview.getText();
         String recommendation = expertReview.getRecommendation();
+        if (rating < 1) rating = 1;
+        if (rating > 5) rating = 5;
 
         MessageCli.REVIEW_ENTRY_HEADER.printMessage(
-            rating, "5", "Expert", review.getReviewId(), name);
+            String.valueOf(rating), "5", "Expert", review.getReviewId(), name);
         MessageCli.REVIEW_ENTRY_REVIEW_TEXT.printMessage(text);
 
         if (recommendation.equalsIgnoreCase("y")) {
