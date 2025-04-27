@@ -573,16 +573,19 @@ public class OperatorManagementSystem {
       if (review instanceof ExpertReview) {
         ExpertReview expert = (ExpertReview) review;
         expert.setImageName(imageName);
+
+        if (review.getReviewId().equals(reviewId)) {
+          review.setImage(true);
+
+          multipleImages.add(imageName);
+          MessageCli.REVIEW_IMAGE_ADDED.printMessage(imageName, reviewId);
+
+          return;
+        }
+      } else if (review instanceof PublicReview || review instanceof PrivateReview) {
+        MessageCli.REVIEW_IMAGE_NOT_ADDED_NOT_EXPERT.printMessage(reviewId);
       }
-
-      if (review.getReviewId().equals(reviewId)) {
-        review.setImage(true);
-
-        multipleImages.add(imageName);
-        MessageCli.REVIEW_IMAGE_ADDED.printMessage(imageName, reviewId);
-
-        return;
-      }
+      return;
     }
     MessageCli.REVIEW_NOT_FOUND.printMessage(reviewId);
   }

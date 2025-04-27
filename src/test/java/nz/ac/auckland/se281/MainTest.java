@@ -1278,6 +1278,30 @@ public class MainTest {
       assertContains("Review not resolved: 'WACT-AKL-001-001-R1' is not a private review.");
       assertDoesNotContain("Review 'WACT-AKL-001-001-R1' resolved successfully.");
     }
+
+    // test whether the review the image is being uploaded to is an expert review
+    @Test
+    public void T3_25_upload_review_image_not_expert() throws Exception {
+      runCommands(
+          CREATE_OPERATOR,
+          "'West Auckland Camel Treks'",
+          "'AKL'",
+          CREATE_ACTIVITY,
+          "'Bethells Beach Camel Trek'",
+          "Adventure",
+          "'WACT-AKL-001'",
+          ADD_PUBLIC_REVIEW,
+          "WACT-AKL-001-001",
+          options("Alice", "n", "3", "Could be better"),
+          UPLOAD_REVIEW_IMAGE,
+          "WACT-AKL-001-001-R1",
+          "'image.png'",
+          EXIT);
+      assertContains("Image not uploaded: 'WACT-AKL-001-001-R1' is not an expert review.");
+      assertDoesNotContain(
+          "Image 'image.png' uploaded successfully for review 'WACT-AKL-001-001-R1'.");
+      assertDoesNotContain("Review not found: 'WACT-AKL-001-001-R1' is an invalid review ID.");
+    }
   }
 
   private static final Object[] CREATE_14_OPERATORS =
