@@ -160,6 +160,7 @@ public class OperatorManagementSystem {
 
     // Getting location/abbreviation from Types.java, and converting to string
     String locationAsString = locationFound.getFullName();
+
     String abbreviationAsString = locationFound.getLocationAbbreviation();
 
     if (operatorName.trim().length() < 3) {
@@ -566,6 +567,32 @@ public class OperatorManagementSystem {
   }
 
   public void displayTopActivities() {
-    // TODO implement
+    for (Types.Location location : Types.Location.values()) {
+      boolean reviewFound = false;
+      OperatorActivity foundActivity = null;
+      String rating = "0";
+
+      for (OperatorActivity activity : activities) {
+        String[] parts = activity.getActivityId().split("-");
+        String locationPart = parts[1];
+
+        if (locationPart.equalsIgnoreCase(location.name())) {
+          for (Reviews review : reviews) {
+            if (review.getActivityId().equals(activity.getActivityId())) {
+
+              foundActivity = activity;
+              rating = ((PublicReview) review).getRating();
+            }
+          }
+        }
+      }
+
+      if (reviewFound) {
+        MessageCli.TOP_ACTIVITY.printMessage(
+            location.getFullName(), foundActivity.getName(), String.valueOf(rating));
+      } else {
+        MessageCli.NO_REVIEWED_ACTIVITIES.printMessage(location.getFullName());
+      }
+    }
   }
 }
