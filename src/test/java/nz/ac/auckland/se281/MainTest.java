@@ -1302,6 +1302,14 @@ public class MainTest {
           "Image 'image.png' uploaded successfully for review 'WACT-AKL-001-001-R1'.");
       assertDoesNotContain("Review not found: 'WACT-AKL-001-001-R1' is an invalid review ID.");
     }
+
+    // test if the activity ID is valid when displaying reviews
+    @Test
+    public void T3_26_display_reviews_activity_id_invalid() throws Exception {
+      runCommands(DISPLAY_REVIEWS, "WACT-AKL-001-001", EXIT);
+      assertContains("Activity not found: 'WACT-AKL-001-001' is an invalid activity ID.");
+      assertDoesNotContain("There are no reviews for activity 'WACT-AKL-001-001'.", true);
+    }
   }
 
   private static final Object[] CREATE_14_OPERATORS =

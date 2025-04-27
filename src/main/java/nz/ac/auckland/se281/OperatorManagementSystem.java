@@ -442,22 +442,28 @@ public class OperatorManagementSystem {
   public void displayReviews(String activityId) {
     int count = 0;
     String activityName = "";
+    boolean activityFound = false;
 
     // Finding activity name from the activityId
     for (OperatorActivity activity : activities) {
       if (activity.getActivityId().equals(activityId)) {
         activityName = activity.getName();
+        activityFound = true;
         break;
       }
+    }
+
+    // Check if activity exists
+    if (!activityFound) {
+      MessageCli.ACTIVITY_NOT_FOUND.printMessage(activityId);
+      return;
     }
 
     for (Reviews review : reviews) {
       // Matching review with activity
       if (!review.getActivityId().equals(activityId)) {
         continue;
-      }
-
-      count++;
+      } else count++;
 
       // Base case
       if (count == 1) {
