@@ -206,6 +206,7 @@ public class OperatorManagementSystem {
   }
 
   public void viewActivities(String operatorId) {
+    // Checking if operator exists
     boolean operatorFound = false;
     String operatorName = "";
 
@@ -222,6 +223,7 @@ public class OperatorManagementSystem {
       return;
     }
 
+    // Collecting activities for the given operator
     ArrayList<OperatorActivity> activitiesFound = new ArrayList<>();
     for (OperatorActivity activity : activities) {
       if (activity.getOperatorId().equals(operatorId)) {
@@ -234,7 +236,7 @@ public class OperatorManagementSystem {
       return;
     }
 
-    // Singular or plural messages
+    // Printing singular or plural messages based on activity count
     if (activitiesFound.size() == 1) {
       MessageCli.ACTIVITIES_FOUND.printMessage("is", "1", "y", ":");
     } else {
@@ -242,6 +244,7 @@ public class OperatorManagementSystem {
           "are", String.valueOf(activitiesFound.size()), "ies", ":");
     }
 
+    // Displaying activities that matching the operator
     for (OperatorActivity activity : activities) {
       if (activity.getOperatorId().equals(operatorId)) {
 
@@ -384,10 +387,12 @@ public class OperatorManagementSystem {
   }
 
   public void addPublicReview(String activityId, String[] options) {
+    // Generating unique review id and creating public review
     String reviewId = generateReviewId(activityId);
     PublicReview review = new PublicReview(reviewId, activityId, options);
     reviews.add(review);
 
+    // Validating activity id and printing success or error messages
     for (OperatorActivity activity : activities) {
       if (activity.getActivityId().equals(activityId)) {
         String activityName = activity.getName();
@@ -400,10 +405,12 @@ public class OperatorManagementSystem {
 
   public void addPrivateReview(String activityId, String[] options) {
 
+    // Unique review id and creating private review
     String reviewId = generateReviewId(activityId);
     PrivateReview review = new PrivateReview(reviewId, activityId, options);
     reviews.add(review);
 
+    // Printing success or error message based on activity id
     for (OperatorActivity activity : activities) {
       if (activity.getActivityId().equals(activityId)) {
         String activityName = activity.getName();
@@ -416,10 +423,12 @@ public class OperatorManagementSystem {
 
   public void addExpertReview(String activityId, String[] options) {
 
+    // Generating a unique review id and creating expert review
     String reviewId = generateReviewId(activityId);
     ExpertReview review = new ExpertReview(reviewId, activityId, options);
     reviews.add(review);
 
+    // Validating activity id and printing messages accordingly
     for (OperatorActivity activity : activities) {
       if (activity.getActivityId().equals(activityId)) {
         String activityName = activity.getName();
@@ -567,45 +576,85 @@ public class OperatorManagementSystem {
   }
 
   public void displayTopActivities() {
+    // Storing matching location abbreviations for activities
+    ArrayList<String> matchingAbb = new ArrayList<>();
+
+    // Iterating through each location to find top-rated activity
     for (Types.Location location : Types.Location.values()) {
+      boolean reviewFound = false;
       OperatorActivity topActivity = null;
       int topRating = 0;
 
+      // Getting abbreviation for location via splitting by "-"
       for (OperatorActivity activity : activities) {
         String[] parts = activity.getActivityId().split("-");
         String locationPart = parts[1];
 
         if (locationPart.equalsIgnoreCase(location.name())) {
+          matchingAbb.add(locationPart);
+
+          int finalRating = 0;
+          int count = 0;
+
+          // Calculating total rating from public and expert reviews
           for (Reviews review : reviews) {
             if (review.getActivityId().equals(activity.getActivityId())
-                && (review instanceof PublicReview)) {
-              int rating = 0;
-              String ratingCheck = ((PublicReview) review).getRating();
-              if (ratingCheck.equals("1")) {
-                rating = 1;
-              } else if (ratingCheck.equals("2")) {
-                rating = 2;
-              } else if (ratingCheck.equals("3")) {
-                rating = 3;
-              } else if (ratingCheck.equals("4")) {
-                rating = 4;
-              } else if (ratingCheck.equals("5")) {
-                rating = 5;
+                && (review instanceof PublicReview || review instanceof ExpertReview)) {
+              if (review instanceof PublicReview) {
+                String ratingCheck = ((PublicReview) review).getRating();
+                int ratingValue = 0;
+                if (ratingCheck.equals("1")) {
+                  ratingValue = 1;
+                } else if (ratingCheck.equals("2")) {
+                  ratingValue = 2;
+                } else if (ratingCheck.equals("3")) {
+                  ratingValue = 3;
+                } else if (ratingCheck.equals("4")) {
+                  ratingValue = 4;
+                } else if (ratingCheck.equals("5")) {
+                  ratingValue = 5;
+                }
+                finalRating = finalRating + ratingValue;
+                count++;
+              } else if (review instanceof ExpertReview) {
+                String ratingCheck = ((ExpertReview) review).getRating();
+                int ratingValue = 0;
+                if (ratingCheck.equals("1")) {
+                  ratingValue = 1;
+                } else if (ratingCheck.equals("2")) {
+                  ratingValue = 2;
+                } else if (ratingCheck.equals("3")) {
+                  ratingValue = 3;
+                } else if (ratingCheck.equals("4")) {
+                  ratingValue = 4;
+                } else if (ratingCheck.equals("5")) {
+                  ratingValue = 5;
+                }
+                finalRating = finalRating + ratingValue;
+                count++;
               }
-              if (rating > topRating) {
-                topRating = rating;
-                topActivity = activity;
-              }
+            }
+          }
+
+          // Get average rating and update top activity if greater
+          if (count > 0) {
+            reviewFound = true;
+            int averageRating = finalRating / count;
+            if (averageRating > topRating) {
+              topRating = (int) averageRating;
+              topActivity = activity;
             }
           }
         }
       }
 
-      if (topActivity != null) {
+      // Displaying top activity if there is a review, otherwise printing no reviewed activites
+      if (reviewFound) {
         MessageCli.TOP_ACTIVITY.printMessage(
             location.getFullName(), topActivity.getName(), String.valueOf(topRating));
       } else {
         MessageCli.NO_REVIEWED_ACTIVITIES.printMessage(location.getFullName());
+        ;
       }
     }
   }
