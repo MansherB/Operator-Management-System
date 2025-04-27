@@ -1235,6 +1235,27 @@ public class MainTest {
       assertContains("Review not endorsed: 'WACT-AKL-001-001-R1' is not a public review.");
       assertDoesNotContain("Review 'WACT-AKL-001-001-R1' endorsed successfully.");
     }
+
+    // test that the correct error is printed when trying to endorse a non-existent review
+    @Test
+    public void T3_23_endorse_review_not_found() throws Exception {
+      runCommands(
+          CREATE_OPERATOR,
+          "'West Auckland Camel Treks'",
+          "'AKL'",
+          CREATE_ACTIVITY,
+          "'Bethells Beach Camel Trek'",
+          "Adventure",
+          "'WACT-AKL-001'",
+          ADD_PUBLIC_REVIEW,
+          "WACT-AKL-001-001",
+          options("Alice", "n", "3", "Could be better"),
+          ENDORSE_REVIEW,
+          "WACT-AKL-001-001-R2",
+          EXIT);
+      assertContains("Review not found: 'WACT-AKL-001-001-R2' is an invalid review ID.");
+      assertDoesNotContain("Review 'WACT-AKL-001-001-R2' endorsed successfully.");
+    }
   }
 
   private static final Object[] CREATE_14_OPERATORS =

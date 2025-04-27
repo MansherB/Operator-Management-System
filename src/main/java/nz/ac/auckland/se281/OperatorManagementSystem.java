@@ -546,9 +546,12 @@ public class OperatorManagementSystem {
         MessageCli.REVIEW_ENDORSED.printMessage(reviewId);
 
         return;
+      } else if (!(review.getReviewId().equals(reviewId))) {
+        MessageCli.REVIEW_NOT_FOUND.printMessage(reviewId);
+      } else {
+        MessageCli.REVIEW_NOT_ENDORSED.printMessage(reviewId);
       }
     }
-    MessageCli.REVIEW_NOT_ENDORSED.printMessage(reviewId);
   }
 
   public void resolveReview(String reviewId, String response) {
