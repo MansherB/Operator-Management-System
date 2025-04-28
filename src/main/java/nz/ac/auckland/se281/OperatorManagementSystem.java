@@ -565,6 +565,7 @@ public class OperatorManagementSystem {
         MessageCli.REVIEW_NOT_ENDORSED.printMessage(reviewId);
       }
     }
+    MessageCli.REVIEW_NOT_FOUND.printMessage(reviewId);
   }
 
   public void resolveReview(String reviewId, String response) {

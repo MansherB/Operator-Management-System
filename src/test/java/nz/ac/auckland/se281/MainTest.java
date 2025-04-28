@@ -1339,6 +1339,13 @@ public class MainTest {
       assertContains("[5/5] Expert review (WACT-AKL-001-001-R3) by 'Clara'");
       assertContains("Recommended by experts.");
     }
+
+    @Test
+    public void T3_28_invalid_review_id_endorsement() throws Exception {
+      runCommands(ENDORSE_REVIEW, "INVALID-ID", EXIT);
+      assertContains("Review not found: 'INVALID-ID' is an invalid review ID.");
+      assertDoesNotContain("Review not endorsed");
+    }
   }
 
   private static final Object[] CREATE_14_OPERATORS =
