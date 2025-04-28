@@ -9,7 +9,7 @@ public class OperatorManagementSystem {
   private ArrayList<OperatorSearch> operators;
   private ArrayList<OperatorActivity> activities = new ArrayList<>();
   private ArrayList<Reviews> reviews = new ArrayList<>();
-  ArrayList<String> multipleImages = new ArrayList<>();
+  private ArrayList<String> multipleImages = new ArrayList<>();
 
   // Do not change the parameters of the constructor
   public OperatorManagementSystem() {
@@ -508,10 +508,12 @@ public class OperatorManagementSystem {
       } else if (review instanceof PrivateReview) {
         PrivateReview privateReview = (PrivateReview) review;
         Integer rating = Integer.parseInt(privateReview.getRating());
+        // Assigning getters from PrivateReview file
         String name = privateReview.getClientName();
         String text = privateReview.getText();
         String followUp = privateReview.getFollowUp();
         String email = privateReview.getEmail();
+        // Edge cases where rating is greater than 5 or less than 1
         if (rating < 1) rating = 1;
         if (rating > 5) rating = 5;
 
@@ -553,30 +555,39 @@ public class OperatorManagementSystem {
   }
 
   public void endorseReview(String reviewId) {
+    // Iterating through all reviews to find the matching review id
     for (Reviews review : reviews) {
+      // Checking if review id matches and review is a PublicReview
       if (review.getReviewId().equals(reviewId) && review instanceof PublicReview) {
         review.setEndorsed(true);
         MessageCli.REVIEW_ENDORSED.printMessage(reviewId);
 
         return;
       } else if (!(review.getReviewId().equals(reviewId))) {
+        // If review id doesn't match, print not found message
         MessageCli.REVIEW_NOT_FOUND.printMessage(reviewId);
       } else {
+        // If review is not a PublicReview, print not endorsed message
         MessageCli.REVIEW_NOT_ENDORSED.printMessage(reviewId);
       }
     }
+    // If no review is found
     MessageCli.REVIEW_NOT_FOUND.printMessage(reviewId);
   }
 
   public void resolveReview(String reviewId, String response) {
     for (Reviews review : reviews) {
+      // Checking if review ID matches and review is a PrivateReview
       if (review.getReviewId().equals(reviewId) && review instanceof PrivateReview) {
+        // Marking the review as resolved and printing success message
         MessageCli.REVIEW_RESOLVED.printMessage(reviewId);
         review.setResolved(true);
         return;
       } else if (review instanceof PublicReview || review instanceof ExpertReview) {
+        // If review is not a PrivateReview, print not resolved message
         MessageCli.REVIEW_NOT_RESOLVED.printMessage(reviewId);
       } else {
+        // If review ID doesn't match, print not found message
         MessageCli.REVIEW_NOT_FOUND.printMessage(reviewId);
       }
     }
@@ -584,23 +595,30 @@ public class OperatorManagementSystem {
 
   public void uploadReviewImage(String reviewId, String imageName) {
     for (Reviews review : reviews) {
+      // Checking if review is an ExpertReview
       if (review instanceof ExpertReview) {
+        // Casting review to ExpertReview to access methods
         ExpertReview expert = (ExpertReview) review;
         expert.setImageName(imageName);
 
+        // Checking if review ID matches
         if (review.getReviewId().equals(reviewId)) {
+          // Marking review as having an image and adding image to multipleImages list
           review.setImage(true);
 
+          // Adding imageName to array and printing success message
           multipleImages.add(imageName);
           MessageCli.REVIEW_IMAGE_ADDED.printMessage(imageName, reviewId);
 
           return;
         }
       } else if (review instanceof PublicReview || review instanceof PrivateReview) {
+        // If review is not an ExpertReview, print not expert message
         MessageCli.REVIEW_IMAGE_NOT_ADDED_NOT_EXPERT.printMessage(reviewId);
       }
       return;
     }
+    // If no review is found:
     MessageCli.REVIEW_NOT_FOUND.printMessage(reviewId);
   }
 
